@@ -1,0 +1,71 @@
+﻿@model ProductViewModel
+
+<div class="containter">
+
+    <div class="row">
+        <div class="card">
+            @if(Model.ImagePaths == null || Model.ImagePaths.Count == 0)
+            {
+                <img src="" class="card-img" alt="Изображение товара">
+            }
+            else
+            {
+            @if (Model.ImagePaths.Count > 1)
+            {
+                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @{
+                            bool flag = true;
+                            @foreach (var image in Model.ImagePaths)
+                            {
+                                @if (flag)
+                                {
+                                    <div class="carousel-item active">
+                                        <img src="@image" class="stream" alt="Изображение товара">
+                                    </div>
+                                    flag = false;
+                                }
+                                else
+                                {
+                                    <div class="carousel-item">
+                                        <img src="@image" class="stream" alt="Изображение товара">
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            }
+
+            else
+            {
+                <img src="@Model.ImagePaths.First()" class="stream" alt="Изображение товара">
+            }
+            }
+            <div class="card-body">
+                <h5 class="card-title">@Model.Name</h5>
+                <p class="card-text">@Model.Description</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Цвет: @Model.Color</li>
+                <li class="list-group-item">Материал: @Model.Material</li>
+                <li class="list-group-item">Пол: @Model.Gender</li>
+            </ul>
+            <div class="card-body">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary me-1"> Продолжить покупки </a>
+                <a asp-controller="Cart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-secondary">Добавить в корзину</a>
+                <a asp-controller="Compare" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-secondary">Сравнить</a>
+                <a asp-controller="Favorites" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-danger">Добавить в избранное</a>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,69 @@
+﻿@model List<ProductViewModel>
+
+<div class="row">
+
+    @foreach (var product in Model)
+    {
+        <div class="col-6 card shadow">
+            @if (product.ImagePaths == null || product.ImagePaths.Count == 0)
+            {
+                <img src="" class="card-img" alt="Изображение товара">
+            }
+            else
+            {
+                @if (product.ImagePaths.Count > 1)
+                {
+                    <div id="@product.Id" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @{
+                                bool flag = true;
+                                @foreach (var image in product.ImagePaths)
+                                {
+                                    @if (flag)
+                                    {
+                                        <div class="carousel-item active">
+                                            <img src="@image" class="stream" alt="Изображение товара">
+                                        </div>
+                                        flag = false;
+                                    }
+                                    else
+                                    {
+                                        <div class="carousel-item">
+                                            <img src="@image" class="stream" alt="Изображение товара">
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#@product.Id" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#@product.Id" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                }
+
+                else
+                {
+                    <img src="@product.ImagePaths.First()" class="stream" alt="Изображение товара">
+                }
+            }
+            <div class="card-body">
+                <a asp-controller="Product" asp-action="Index" asp-route-id="@product.Id" style="color: black">
+                    <h4>@product.Name</h4>
+                </a>
+                <h5>@product.Cost руб.</h5>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Cart" asp-action="Add" asp-route-Id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark"> Добавить в корзину </a>
+                    <a asp-controller="Compare" asp-action="Add" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark">Сравнить</a>
+                    <a asp-controller="Favorites" asp-action="Add" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-danger">Добавить в избранное</a>
+                }
+            </div>
+        </div>
+    }
+</div>
+

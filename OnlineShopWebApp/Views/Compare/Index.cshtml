@@ -1,0 +1,40 @@
+﻿@model CompareViewModel
+
+@if (Model == null || Model.Products.Count == 0)
+{
+    <h1>Выберите товары для сравнения</h1>
+}
+else
+{
+    <div class="row">
+        @foreach (var product in Model.Products)
+        {
+
+            <div class="card col-3">
+                <img src="@product.ImagePaths" alt="~/img/img.webp" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Description</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Цвет: @product.Color</li>
+                    <li class="list-group-item">Материал: @product.Material</li>
+                    <li class="list-group-item">Пол: @product.Gender</li>
+                </ul>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <a asp-controller="Compare" asp-action="Remove" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-secondary">Убрать из сравнения</a>
+                        </div>
+                        <div class="row">
+                            <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-warning">Добавить в Корзину</a>
+                        </div>
+                        <div class="row">
+                            <a asp-controller="Favorites" asp-action="Add" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-danger">Добавить в избранное</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

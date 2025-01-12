@@ -1,0 +1,61 @@
+﻿@model List<ProductViewModel>
+<div class="container">
+    @await Html.PartialAsync("_AdminLayout")
+    <h1 class="text-center">Список продуктов</h1>
+
+    <a asp-area="Administration" asp-controller="Product" asp-action="Add" class=""> Добавить новый продукт </a>
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row-cols-6">
+            <table class="table table-dark table-striped">
+                <tr>
+                    <th>Nᵒ</th>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                @{
+                    int i = 1;
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>
+                                @i
+                            </td>
+                            <td>
+                                @product.Name
+                            </td>
+                            <td>
+                                @product.Cost
+                            </td>
+                            <td>
+                                <a asp-area="Administration" asp-controller="Product" asp-action="Update" asp-route-Id="@product.Id" class="">Редактировать</a>
+                            </td>
+                            <td>
+                                <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-info">Удалить</a>
+                            </td>
+                        </tr>
+                        i++;
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Уведомление</h1>
+                                    </div>
+                                    <div class="modal-body">
+                                        Подтвердите удаление товара @product.Name
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                        <a asp-area="Administration" asp-controller="Product" asp-action="Remove" asp-route-Id="@product.Id" class="btn btn-outline-dark">Подтвердить</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </table>
+        </div>
+    }
+</div>

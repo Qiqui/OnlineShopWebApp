@@ -1,0 +1,71 @@
+﻿@model ProductAddViewModel
+
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
+        <div class="row">
+            <label asp-for="Name">Название товара</label>
+            <input asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div class="row">
+            <label asp-for="Cost">Стоимость</label>
+            <input asp-for="Cost" />
+            <span asp-validation-for="Cost"></span>
+        </div>
+        <div class="row">
+            <label asp-for="Description">Описание</label>
+            <textarea asp-for="Description"></textarea>
+            <span asp-validation-for="Description"></span>
+        </div>
+        <div class="row-cols-2">
+            <label asp-for="Category">Категория</label>
+            <select asp-for="Category"
+                    asp-items="@Html.GetEnumSelectList<CategoryEnum>()"
+                    class="form-control">
+            </select>
+        </div>
+        <div class="row-cols-2">
+            <label asp-for="Brand">Бренд</label>
+            <select asp-for="Brand"
+                    asp-items="@Html.GetEnumSelectList<BrandEnum>()"
+                    class="form-control">
+            </select>
+        </div>
+        <div class="row-cols-2">
+            <label asp-for="Color">Цвет</label>
+            <select asp-for="Color"
+                    asp-items="@Html.GetEnumSelectList<ColorEnum>()"
+                    class="form-control">
+            </select>
+        </div>
+        <div class="row-cols-2">
+            <label asp-for="Collection">Коллекция</label>
+            <select asp-for="Collection"
+                    asp-items="@Html.GetEnumSelectList<CollectionEnum>()"
+                    class="form-control">
+            </select>
+        </div>
+        <div class="row-cols-2">
+            <label asp-for="Material">Материал</label>
+            <select asp-for="Material"
+                    asp-items="@Html.GetEnumSelectList<MaterialEnum>()"
+                    class="form-control">
+            </select>
+        </div>
+        <div class="row-cols-2">
+            <label asp-for="Gender">Пол</label>
+            <select asp-for="Gender">
+                <option value="Woman">Женский</option>
+                <option value="Man">Мужской</option>
+            </select>
+        </div>
+        <div class="row-cols-2">
+            <label>Загрузить изображение</label>
+            <input type="file" asp-for="UploadedFiles" class="form-control" multiple/>
+        </div>
+        <div class="row-cols-6">
+            <button type="submit" class="btn btn-outline-success" asp-area="Administration" asp-controller="Product" asp-action="Add"> Добавить товар </button>
+        </div>
+    </div>
+</form>

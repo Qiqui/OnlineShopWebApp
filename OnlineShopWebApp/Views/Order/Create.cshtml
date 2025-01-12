@@ -1,0 +1,38 @@
+﻿@model OrderViewModel
+
+<form method="post">
+    <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+    <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
+    <div class="row">
+        <label asp-for="@Model.ContactInfo.Email">Почта</label>
+        <input asp-for="@Model.ContactInfo.Email" />
+        <span asp-validation-for="@Model.ContactInfo.Email"></span>
+    </div>
+    <div class="row">
+        <label asp-for="@Model.ContactInfo.Name">Имя</label>
+        <input asp-for="@Model.ContactInfo.Name" />
+        <span asp-validation-for="@Model.ContactInfo.Name"></span>
+    </div>
+    <div class="row">
+        <label asp-for="@Model.ContactInfo.Surname">Фамилия</label>
+        <input asp-for="@Model.ContactInfo.Surname" />
+        <span asp-validation-for="@Model.ContactInfo.Surname"></span>
+    </div>
+    <div class="row">
+        <label asp-for="@Model.ContactInfo.Address">Адрес</label>
+        <input asp-for="@Model.ContactInfo.Address" />
+        <span asp-validation-for="@Model.ContactInfo.Address"></span>
+        <div class="row">
+            <label asp-for="@Model.ContactInfo.Phone">Номер телефона</label>
+            <input asp-for="@Model.ContactInfo.Phone" />
+            <span asp-validation-for="@Model.ContactInfo.Phone"></span>
+        </div>
+        <div class="row">
+            <div class="mb-3 form-check">
+                <label asp-for="@Model.ContactInfo.IsAgreeWithDataProcessing">Даю согласие на обработку персональных данных</label>
+                <input type="checkbox" asp-for="@Model.ContactInfo.IsAgreeWithDataProcessing" required title="Необходимо дать согласие на обработку персональных данных" />
+                <span asp-validation-for="@Model.ContactInfo.IsAgreeWithDataProcessing"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-success" asp-controller="Order" asp-action="Buy"> Оформить заказ </button>
+</form>

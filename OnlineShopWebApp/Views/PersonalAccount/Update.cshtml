@@ -1,0 +1,39 @@
+﻿@model UserUpdateViewModel
+
+<form method="post" enctype="multipart/form-data">
+    <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <input type="hidden" asp-for="ImagePath" value="@Model.ImagePath" />
+    <div class="row">
+        <label asp-for="Email">Почта</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="row">
+        <label asp-for="Name">Имя</label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="row">
+        <label asp-for="Surname">Фамилия</label>
+        <input asp-for="Surname" />
+        <span asp-validation-for="Surname"></span>
+    </div>
+    <div class="row">
+        <label asp-for="Age">Возраст</label>
+        <input asp-for="Age" />
+        <span asp-validation-for="Age"></span>
+    </div>
+    <div class="row">
+        <label asp-for="Phone">Телефон</label>
+        <input asp-for="Phone" />
+        <span asp-validation-for="Phone"></span>
+    </div>
+     <div class="row-cols-2">
+        <label>Загрузить изображение</label>
+        <input type="file" asp-for="UploadedFile" multiple />
+    </div>
+    <div class="row-cols-auto">
+        <button type="submit" class="btn btn-outline-success" asp-area="" asp-controller="PersonalAccount" asp-action="Update" asp-route-id="@Model.Id"> Подтвердить редактирование </button>
+    </div>
+</form>

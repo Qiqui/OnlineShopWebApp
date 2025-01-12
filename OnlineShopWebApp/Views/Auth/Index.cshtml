@@ -1,0 +1,26 @@
+﻿@model AuthorizationViewModel
+
+<form method="post">
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+    <div class="text-danger font-weight-bold" asp-validation-summary="ModelOnly"></div>
+    <div class="row">
+        <label asp-for="Email">Почта</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="row">
+        <label asp-for="Password">Пароль</label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input align-content-center" name="IsRemembered">
+        <label class="form-check-label" for="exampleCheck1">Запомнить меня?</label>
+    </div>
+    <div class="row-cols-6">
+        <button type="submit" class="btn btn-outline-success" asp-area="" asp-controller="Auth" asp-action="Authorization"> Войти </button>
+    </div>
+    <div class="row-cols-8">
+        <a class="btn btn-outline-dark" asp-area="" asp-controller="Auth" asp-action="Registration" asp-route-returnUrl="@Model.ReturnUrl">Регистрация нового пользователя</a>
+    </div>
+</form>

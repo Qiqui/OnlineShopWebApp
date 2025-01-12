@@ -1,0 +1,20 @@
+﻿@model OrderViewModel
+
+
+@await Html.PartialAsync("_AdminLayout")
+<p>Дата оформления: @Model.CreateDate.ToString("dddd, dd MMMM yyyy")</p>
+<p>Адрес доставки: @Model.ContactInfo.Address</p>
+<p>Получатель: @Model.ContactInfo.Name @Model.ContactInfo.Surname</p>
+<p>Телефон: @Model.ContactInfo.Phone</p>
+<p>Email: @Model.ContactInfo.Email</p>
+<p>Сумма заказа: @Model.TotalPrice</p>
+<form method="post">
+    <div class="row-cols-2">
+        <label asp-for="Status">Текущий статус: @EnumExtensions.GetDisplayName(Model.Status)</label>
+        <select asp-for="Status"
+                asp-items="@Html.GetEnumSelectList<OrderStatusEnum>()"
+                class="form-control">
+        </select>
+        <button type="submit" class="small" asp-area="Administration" asp-controller="Order" asp-action="UpdateStatus" asp-route-id="@Model.Id">Изменить статус</button>
+    </div>
+</form>

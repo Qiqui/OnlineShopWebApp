@@ -1,0 +1,27 @@
+﻿@model List<ProductViewModel>
+
+@if (Model == null || Model.Count == 0)
+{
+    <h3>Поиск не дал результатов</h3>
+}
+
+else
+{
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-6 card shadow">
+                <img class="card-img-top" src="@product.ImagePaths" alt="Изображение товара" />
+                <div class="card-body">
+                    <a asp-controller="Product" asp-action="Index" asp-route-id="@product.Id" style="color: black">
+                        <h4>@product.Name</h4>
+                    </a>
+                    <h5>@product.Cost руб.</h5>
+                    <a asp-controller="Cart" asp-action="Add" asp-route-Id="@product.Id" class="btn btn-outline-dark"> Добавить в корзину </a>
+                    <a asp-controller="Compare" asp-action="Add" asp-route-id="@product.Id" class="btn btn-outline-dark">Сравнить</a>
+                    <a asp-controller="Favorites" asp-action="Add" asp-route-id="@product.Id" class="btn btn-danger">Добавить в избранное</a>
+                </div>
+            </div>
+        }
+    </div>
+}

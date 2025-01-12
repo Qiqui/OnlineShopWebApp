@@ -1,0 +1,56 @@
+﻿@using OnlineShop.Db.Models
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OnlineShopWebApp</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav flex-grow-1">
+                    @if(User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            @await Component.InvokeAsync("UserImage")
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark text-md-start" asp-area="" asp-controller="PersonalAccount" asp-action="Index" asp-route-userName="@User.Identity.Name">Личный кабинет</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark text-md-start" asp-area="" asp-controller="Compare" asp-action="Index" asp-route-userName="@User.Identity.Name">Сравнение товаров</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark text-md-start" asp-area="" asp-controller="Favorites" asp-action="Index" asp-route-userName="@User.Identity.Name">Избранное</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark text-md-start" asp-area="" asp-controller="Auth" asp-action="Logout">Выйти</a>
+                        </li>
+                    }
+                    else
+                    {
+                    <li class="nav-item">
+                            <a class="nav-link text-dark text-md-start" asp-area="" asp-controller="Auth" asp-action="Index">Авторизация</a>
+                    </li>
+                    }
+                    @if (User.IsInRole(Constants.AdminRoleName))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark text-md-start" asp-area="Administration" asp-controller="Order" asp-action="GetAll">Администратор</a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index" asp-route-userName="@User.Identity.Name">Корзина @await Component.InvokeAsync("Cart")</a>
+                    </li>
+                    <li>
+                        <form method="post" class="mb-3">
+                            <input type="search" name="keyWords" placeholder="Что ищем?">
+                            <button asp-controller="Search" asp-action="Searching" class="btn-info">Поиск</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

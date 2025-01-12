@@ -1,0 +1,47 @@
+﻿@model UserViewModel
+
+<div class="row-cols-3">
+    <form method="post">
+        <div>
+            <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
+            <div class="row">
+                <label asp-for="Name">Имя</label>
+                <input asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div class="row">
+                <label asp-for="Surname">Фамилия</label>
+                <input asp-for="Surname" />
+                <span asp-validation-for="Surname"></span>
+            </div>
+            <div class="row">
+                <label asp-for="Age">Возраст</label>
+                <input asp-for="Age" />
+                <span asp-validation-for="Age"></span>
+            </div>
+            <div class="row">
+                <label asp-for="Phone">Номер телефона</label>
+                <input asp-for="Phone" />
+                <span asp-validation-for="Phone"></span>
+            </div>
+            <div class="row">
+                <label asp-for="Email">Почта</label>
+                <input asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div class="row">
+                <label asp-for="Password">Пароль</label>
+                <input asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div class="row">
+                <label asp-for="PasswordConfirm">Повторите пароль</label>
+                <input asp-for="PasswordConfirm" />
+                <span asp-validation-for="PasswordConfirm"></span>
+            </div><br />
+            <div class="row">
+                <button type="submit" class="btn btn-outline-success" asp-controller="User" asp-action="Add"> Добавить пользователя </button>
+            </div>
+        </div>
+    </form>
+</div>

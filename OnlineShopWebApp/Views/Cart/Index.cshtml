@@ -1,0 +1,45 @@
+﻿@model CartViewModel
+
+
+<div class="row">
+    @if (Model == null || Model.Positions.Count == 0)
+    {
+        <h1 colspan="6" class="text-center">Корзина пуста</h1>
+    }
+    else
+    {
+        <table class="table table-dark table-striped">
+            <tr>
+                <th>Наименование товара</th>
+                <th>Количество</th>
+                <th>Цена</th>
+            </tr>
+
+            <a asp-controller="Cart" asp-action="TryClear" asp-route-userName="@User.Identity.Name" class=" btn btn-dark"> Очистить корзину </a>
+
+            @foreach (var product in Model.Positions)
+            {
+                <tr>
+                    <td>
+                        <div class="col-2"><img class="card-img-top" src="~/img/img.webp" /></div>
+                        @product.Product.Name
+                    </td>
+                    <td>
+                        <a asp-controller="Cart" asp-action="Remove" asp-route-Id="@product.Product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-danger">-</a>
+                        @product.Quantity
+                        <a asp-controller="Cart" asp-action="Add" asp-route-Id="@product.Product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-success">+</a>
+                    </td>
+                    <td>@product.GetTotalPrice() руб.</td>
+                </tr>
+            }
+
+        </table>
+
+        <hr>
+        <p class="text-end"><b>Итого: @Model.GetTotalCost() руб.</p>
+        <hr>
+        <div class="offset-10">
+            <a asp-controller="Order" asp-action="Create" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark" float-sm-right> Оформить заказ </a>
+        </div>
+    }
+</div>

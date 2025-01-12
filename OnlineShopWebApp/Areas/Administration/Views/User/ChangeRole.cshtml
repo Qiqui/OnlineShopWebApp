@@ -1,0 +1,19 @@
+﻿@model ChangeRoleViewModel
+<h1>Пользователь: @Model.User.Email</h1>
+
+<p1>Текущая роль: @Model.RoleName</p1>
+<div>
+    <form method="post">
+        <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
+        <div class="row-cols-2">
+            <label asp-for="RoleId">Выбрать роль </label>
+            <select asp-for="RoleId"
+                    asp-items="@new SelectList(Model.Roles,nameof(RoleViewModel.Id), nameof(RoleViewModel.Name).ToString(), Model.RoleId)"
+                    class="form-control">
+            </select>
+        </div>
+        <div class="row-cols-auto">
+            <button type="submit" class="btn btn-outline-success" asp-area="Administration" asp-controller="User" asp-action="ChangeRole" asp-route-userId="@Model.User.Id"> Изменить роль </button>
+        </div>
+    </form>
+</div>

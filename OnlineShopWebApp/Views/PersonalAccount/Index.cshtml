@@ -1,0 +1,19 @@
+﻿@model UserViewModel
+
+<h1>Пользователь: @Model.Email</h1>
+
+<p>Имя: @Model.Name</p>
+<p>Фамилия: @Model.Surname</p>
+<p>Почта: @Model.Email</p>
+<p>Телефон: @Model.Phone</p>
+<ul>
+    <li>
+        <a asp-area="" asp-controller="PersonalAccount" asp-action="Update" asp-route-id="@Model.Id">Редактирование данных</a>
+    </li>
+    <li>
+        <a asp-area="" asp-controller="PersonalAccount" asp-action="Orders" asp-route-id="@Model.Id">Мои заказы</a>
+    </li>
+    <li>
+        <a asp-area="" asp-controller="Auth" asp-action="Logout">Выйти</a>
+    </li>
+</ul>

@@ -1,0 +1,39 @@
+﻿@model List<UserViewModel>
+
+@await Html.PartialAsync("_AdminLayout")
+<h1 class="text-center">Список пользователей</h1>
+<a asp-area="Administration" asp-controller="User" asp-action="Add">Добавить пользователя</a>
+@if (Model != null && Model.Count > 0)
+{
+    <div class="row-cols-6">
+        <table class="table table-dark table-striped">
+            <tr>
+                <th>Email</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Телефон</th>
+                <th></th>
+            </tr>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>
+                        @user.Email
+                    </td>
+                    <td>
+                        @user.Name
+                    </td>
+                    <td>
+                        @user.Surname
+                    </td>
+                    <td>
+                        @user.Phone
+                    </td>
+                    <td>
+                        <a asp-area="Administration" asp-controller="User" asp-action="User" asp-route-id="@user.Id">Просмотр</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
