@@ -19,6 +19,7 @@ html {
 
 body {
     margin-bottom: 60px;
+    background-color: bisque;
 }
 
 footer {
@@ -27,7 +28,17 @@ footer {
     width: 100%;
     /* Set the fixed height of the footer here */
     height: 60px;
+    background-color: #070A13;
+}
+
+.background-navbar-main {
+    background-color: #070A13;
+}
+
+.search-button {
+    color: black;
     background-color: white;
+    border-color: cornsilk;
 }
 
 .stream {
