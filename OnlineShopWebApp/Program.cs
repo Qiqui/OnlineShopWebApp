@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
-using Serilog;
-using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using Microsoft.EntityFrameworkCore;
-using OnlineShop.Db.Repositories;
-using OnlineShop.Db.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using OnlineShop.Domain.Interfaces;
+using OnlineShop.Infrastructure.Identity;
+using OnlineShop.Infrastructure.Persistence;
+using OnlineShop.Infrastructure.Repositories;
+using Serilog;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,14 +15,14 @@ string connection = builder.Configuration.GetConnectionString("online_shop");
 
 
 // добавляем контекст DatabaseContext в качестве сервиса в приложение
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connection));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
-builder.Services.AddIdentity<User, IdentityRole>(options =>
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
-    })
+})
                 // устанавливаем тип хранилища - наш контекст
-                .AddEntityFrameworkStores<DatabaseContext>();
+                .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -36,11 +36,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 // Add services to the container.
-builder.Services.AddTransient<IProductsRepository, ProductsRepository>();
-builder.Services.AddTransient<ICartsRepository, CartsRepository>();
-builder.Services.AddTransient<ICompareRepository, CompareRepository>();
-builder.Services.AddTransient<IFavouritesRepository, FavouritesRepository>();
-builder.Services.AddTransient<IOrdersRepository, OrdersRepository>();
+builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+builder.Services.AddScoped<ICartsRepository, CartsRepository>();
+builder.Services.AddScoped<ICompareRepository, CompareRepository>();
+builder.Services.AddScoped<IFavouritesRepository, FavouritesRepository>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 builder.Services.AddControllersWithViews();
 
@@ -72,9 +72,9 @@ if (!app.Environment.IsDevelopment())
 using (var serviceScope = app.Services.CreateScope())
 {
     var services = serviceScope.ServiceProvider;
-    var userManager = services.GetRequiredService<UserManager<User>>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    IdentityInitializer.Initialize(userManager, rolesManager);
+    // IdentityInitializer.Initialize(userManager, rolesManager); РЕШИТЬ ПОЗЖЕ, НУЖЕН ИЛИ НЕТ \\\\\\\\\\\\\\\
 }
 
 app.UseHttpsRedirection();
