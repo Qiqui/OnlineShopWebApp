@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace OnlineShop.Domain.Entities
+﻿namespace OnlineShop.Domain.Entities
 {
-    public class User : IdentityUser
+    public class User
     {
-        [ProtectedPersonalData]
         public string? Name { get; set; }
-        [ProtectedPersonalData]
         public string? Surname { get; set; }
         public int Age { get; set; }
         public string ImagePath { get; set; }

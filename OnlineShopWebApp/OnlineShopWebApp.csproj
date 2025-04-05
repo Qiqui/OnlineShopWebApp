@@ -20,11 +20,11 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\OnlineShop.Db\OnlineShop.Db.csproj" />
+	  <Folder Include="wwwroot\images\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="wwwroot\images\" />
+	  <ProjectReference Include="..\OnlineShop.Application\OnlineShop.Application.csproj" />
 	</ItemGroup>
 
 </Project>
