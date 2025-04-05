@@ -4,9 +4,9 @@ namespace OnlineShop.Domain.Interfaces
 {
     public interface ICompareRepository
     {
-        Compare TryGetById(string userId);
-        Product TryGetProductById(Guid Id);
-        void Add(Guid id, string userId);
-        void Remove(Guid id, string userId);
+        Task<Compare> TryGetById(string userId);
+        Task<Product> TryGetProductById(Guid Id);
+        Task Add(Guid id, string userId);
+        Task Remove(Guid id, string userId);
     }
 }

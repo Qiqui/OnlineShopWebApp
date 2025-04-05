@@ -4,10 +4,10 @@ namespace OnlineShop.Domain.Interfaces
 {
     public interface ICartsRepository
     {
-        Cart TryGetById(string userId);
-        void Add(User user);
-        void Add(Product product, User user);
-        void Remove(Product product, User user);
-        bool Clear(string userId);
+        Task<Cart> TryGetById(string userId);
+        Task Add(User user);
+        Task Add(Product product, User user);
+        Task Remove(Product product, User user);
+        Task<bool> Clear(string userId);
     }
 }

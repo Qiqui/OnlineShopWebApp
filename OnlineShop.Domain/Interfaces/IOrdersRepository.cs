@@ -5,13 +5,13 @@ namespace OnlineShop.Domain.Interfaces
 {
     public interface IOrdersRepository
     {
-        Order TryGetById(Guid id);
-        Order TryGetLastByUserId(string userId);
-        List<CartPosition> GetCartPositions(Guid id);
-        List<Order> TryGetByUserId(string id);
-        List<Order> GetAll();
-        bool Add(Guid cartId, string userId, ContactInfo contactInfo);
-        bool UpdateStatus(Guid id, OrderStatusEnum status);
-        int IncreaseNumber();
+        Task<Order> TryGetById(Guid id);
+        Task<Order> TryGetLastByUserId(string userId);
+        Task<List<CartPosition>> GetCartPositions(Guid id);
+        Task<List<Order>> TryGetByUserId(string id);
+        Task<List<Order>> GetAll();
+        Task<bool> Add(Guid cartId, string userId, ContactInfo contactInfo);
+        Task<bool> UpdateStatus(Guid id, OrderStatusEnum status);
+        Task<int> IncreaseNumber();
     }
 }

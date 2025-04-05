@@ -4,9 +4,9 @@ namespace OnlineShop.Domain.Interfaces
 {
     public interface IFavouritesRepository
     {
-        Favourites TryGetById(string userId);
-        Product TryGetProductById(Guid Id);
-        void Add(Guid id, string userId);
-        void Remove(Guid id, string userId);
+        Task<Favourites> TryGetById(string userId);
+        Task<Product> TryGetProductById(Guid Id);
+        Task Add(Guid id, string userId);
+        Task Remove(Guid id, string userId);
     }
 }
