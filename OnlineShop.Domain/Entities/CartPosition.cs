@@ -1,0 +1,10 @@
+﻿namespace OnlineShop.Domain.Entities
+{
+    public class CartPosition
+    {
+        public Guid Id { get; set; }
+        public int Quantity { get; set; }
+        public Product Product { get; set; }
+        public Cart Cart { get; set; }
+    }
+}

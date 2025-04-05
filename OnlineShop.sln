@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopWebApp", "OnlineS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShop.Db", "OnlineShop.Db\OnlineShop.Db.csproj", "{481DCB6F-7574-4B4C-B785-93C700520BA3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.Domain", "OnlineShop.Domain\OnlineShop.Domain.csproj", "{4C88CD3B-C530-443A-8640-DCF6DFE20412}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.Application", "OnlineShop.Application\OnlineShop.Application.csproj", "{C8A194A0-BF90-4B3F-A762-384BD17BA0CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.Infrastructure", "OnlineShop.Infrastructure\OnlineShop.Infrastructure.csproj", "{2025FCCA-6A4F-46BC-817F-E9E720CE9D29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{481DCB6F-7574-4B4C-B785-93C700520BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{481DCB6F-7574-4B4C-B785-93C700520BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{481DCB6F-7574-4B4C-B785-93C700520BA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C88CD3B-C530-443A-8640-DCF6DFE20412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C88CD3B-C530-443A-8640-DCF6DFE20412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C88CD3B-C530-443A-8640-DCF6DFE20412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C88CD3B-C530-443A-8640-DCF6DFE20412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A194A0-BF90-4B3F-A762-384BD17BA0CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A194A0-BF90-4B3F-A762-384BD17BA0CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A194A0-BF90-4B3F-A762-384BD17BA0CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A194A0-BF90-4B3F-A762-384BD17BA0CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2025FCCA-6A4F-46BC-817F-E9E720CE9D29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2025FCCA-6A4F-46BC-817F-E9E720CE9D29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2025FCCA-6A4F-46BC-817F-E9E720CE9D29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2025FCCA-6A4F-46BC-817F-E9E720CE9D29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
