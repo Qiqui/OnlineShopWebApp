@@ -5,8 +5,8 @@ namespace OnlineShop.Domain.Interfaces
 {
     public interface IOrdersRepository
     {
-        Task<Order> TryGetById(Guid id);
-        Task<Order> TryGetLastByUserId(string userId);
+        Task<Order?> TryGetById(Guid id);
+        Task<Order?> TryGetLastByUserId(string userId);
         Task<List<CartPosition>> GetCartPositions(Guid id);
         Task<List<Order>> TryGetByUserId(string id);
         Task<List<Order>> GetAll();

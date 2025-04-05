@@ -8,7 +8,7 @@ namespace OnlineShop.Domain.Interfaces
         Task<bool> TryToRemove(Guid id);
         Task Update(Guid id, Product product);
         Task<List<Product>> GetAll();
-        Task<Product> TryGetById(Guid id);
+        Task<Product?> TryGetById(Guid id);
         Task<List<Product>> Search(string keyWords);
     }
 }
