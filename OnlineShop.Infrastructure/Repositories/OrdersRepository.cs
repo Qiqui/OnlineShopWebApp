@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain.Enums;
-using OnlineShop.Db.Helpers;
+using OnlineShop.Infrastructure.Helpers;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Infrastructure.Persistence;
@@ -11,18 +11,18 @@ namespace OnlineShop.Infrastructure.Repositories
     public class OrdersRepository : IOrdersRepository
     {
         private readonly AppDbContext _databaseContext;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager; // TODO: Убрать, возможно, не понадобится
 
         public OrdersRepository(AppDbContext appDbContext, UserManager<User> userManager)
         {
             _databaseContext = appDbContext;
-            _userManager = userManager;
+            _userManager = userManager; // TODO: Убрать, возможно не понадобится
         }
 
         public async Task<Order?> GetById(Guid id)
         {
             return  await _databaseContext.Orders
-                .Include(order => order.User)
+                .Include(order => order.UserId)
                 .Include(order => order.ContactInfo)
                 .Include(order => order.Positions)
                     .ThenInclude(position => position.Product)
@@ -31,52 +31,54 @@ namespace OnlineShop.Infrastructure.Repositories
 
         public async Task<List<Order>> GetByUserId(string userId)
         {
-            return _databaseContext.Orders
-                .Include(order => order.User)
+            return await _databaseContext.Orders
+                .Include(order => order.UserId)
                 .Include(order => order.ContactInfo)
                 .Include(order => order.Positions)
                     .ThenInclude(position => position.Product)
-                .Where(order => order.User.Id == userId)
-                .ToList();
+                .Where(order => order.UserId == userId)
+                .ToListAsync();
         }
 
         public async Task<Order?> GetLastByUserId(string userId)
         {
             return _databaseContext.Orders
-                .Where(order => order.User.Id == userId)
+                .Where(order => order.UserId == userId)
                 .OrderByDescending(order => order.CreateDate)
                 .FirstOrDefault();
         }
 
         public async Task<List<CartPosition>> GetCartPositions(Guid id)
         {
-            return await _databaseContext.Carts
-                .FirstOrDefaultAsync(cart => cart.Id == id)?
-                .Positions;
+            var cart = await _databaseContext.Carts
+                .Include(cart => cart.Positions)
+                .FirstOrDefaultAsync(cart => cart.Id == id);
+
+            return cart?.Positions ?? new List<CartPosition>();
         }
 
-        public int IncreaseNumber()
+        public async Task<int> IncreaseNumber()
         {
-            return _databaseContext.Orders.Count() + 1;
+            return await _databaseContext.Orders.CountAsync() + 1;
         }
 
         public async Task<bool> Add(Guid cartId, string userId, ContactInfo contactInfo)
         {
-            var cartPositions = GetCartPositions(cartId);
-            var user = _userManager.FindByIdAsync(userId).Result;
+            var cartPositions = await GetCartPositions(cartId);
+            //var user = await _userManager.FindByIdAsync(userId); TODO: УДАЛИТЬ, СКОРЕЕ ВСЕГО НЕ ПОНАДОБИТСЯ
             if (cartPositions != null)
             {
                 var order = new Order()
                 {
-                    User = user,
+                    UserId = userId,
                     Positions = cartPositions.ToOrderPositions(),
                     ContactInfo = contactInfo,
                     CreateDate = DateTime.Now,
-                    Number = IncreaseNumber()
+                    Number = await IncreaseNumber()
                 };
 
-                _databaseContext.Orders.AddAsync(order);
-                _databaseContext.SaveChangesAsync();
+               await _databaseContext.Orders.AddAsync(order);
+               await _databaseContext.SaveChangesAsync();
 
                 return true;
             }
@@ -87,7 +89,7 @@ namespace OnlineShop.Infrastructure.Repositories
         public async Task<List<Order>> GetAll()
         {
             return await _databaseContext.Orders
-                .Include(order => order.User)
+                .Include(order => order.UserId)
                 .Include(order => order.ContactInfo)
                 .Include(order => order.Positions)
                     .ThenInclude(position => position.Product)
@@ -96,7 +98,7 @@ namespace OnlineShop.Infrastructure.Repositories
 
         public async Task<bool> UpdateStatus(Guid id, OrderStatusEnum status)
         {
-            var order = GetById(id);
+            var order = await GetById(id);
             if (order != null)
             {
                 order.Status = status;

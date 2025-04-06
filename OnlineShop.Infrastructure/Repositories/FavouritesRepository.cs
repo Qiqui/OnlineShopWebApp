@@ -9,7 +9,7 @@ namespace OnlineShop.Infrastructure.Repositories
     public class FavouritesRepository : IFavouritesRepository
     {
         private readonly AppDbContext _appDbContext;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager; //TODO: Убрать, возможно, не понадобится
 
         public FavouritesRepository(AppDbContext appDbContext, UserManager<User> userManager)
         {
@@ -22,7 +22,7 @@ namespace OnlineShop.Infrastructure.Repositories
         {
             return  await _appDbContext.Favourites
                 .Include(favourite => favourite.Products)
-                .FirstOrDefaultAsync(favorites => favorites.User.Id == userId);
+                .FirstOrDefaultAsync(favorites => favorites.UserId == userId);
         }
         public async Task<Product?> GetProductById(Guid Id)
         {
@@ -32,19 +32,18 @@ namespace OnlineShop.Infrastructure.Repositories
 
         public async Task Add(Guid id, string userId)
         {
-            var favorites = GetById(userId);
+            var favorites = await GetById(userId);
             if (favorites != null)
             {
-                var product = GetProductById(id);
+                var product = await GetProductById(id);
                 if (product != null && !favorites.Products.Contains(product))
                     favorites.Products.Add(product);
             }
             else
             {
-                var user = _userManager.FindByIdAsync(userId).Result;
-                var newFavorites = new Favourites { User = user };
-                _appDbContext.Favourites.Add(newFavorites);
-                var product = GetProductById(id);
+                var newFavorites = new Favourites { UserId = userId };
+                await _appDbContext.Favourites.AddAsync(newFavorites);
+                var product = await GetProductById(id);
                 if (product != null)
                     newFavorites.Products.Add(product);
             }
@@ -54,10 +53,10 @@ namespace OnlineShop.Infrastructure.Repositories
 
         public async Task Remove(Guid id, string userId)
         {
-            var favorites = GetById(userId);
+            var favorites = await GetById(userId);
             if (favorites != null)
             {
-                var product = GetProductById(id);
+                var product = await GetProductById(id);
                 if (product != null)
                     favorites.Products.Remove(product);
             }

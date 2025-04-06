@@ -5,7 +5,7 @@ namespace OnlineShop.Domain.Entities
     public class Order
     {
         public Guid Id { get; set; }
-        public User User { get; set; }
+        public string UserId { get; set; }
         public int Number { get; set; }
         public ContactInfo ContactInfo { get; set; }
         public DateTime CreateDate { get; set; }

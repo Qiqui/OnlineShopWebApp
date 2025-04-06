@@ -26,16 +26,16 @@ namespace OnlineShop.Infrastructure.Repositories
         }
         public async Task Add(Product product)
         {
-            await _appDbContext.Products.AddAsync(product);
+           await _appDbContext.Products.AddAsync(product);
            await _appDbContext.SaveChangesAsync();
         }
 
         public async Task<bool> Remove(Guid id)
         {
-            var product = GetById(id);
+            var product = await GetById(id);
             if (product != null)
             {
-                await _appDbContext.Products.Remove(product);
+                _appDbContext.Products.Remove(product);
                 await _appDbContext.SaveChangesAsync();
                 return true;
             }
@@ -45,7 +45,7 @@ namespace OnlineShop.Infrastructure.Repositories
 
         public async Task Update(Guid id, Product productUpdate)
         {
-            var product = GetById(id);
+            var product = await GetById(id);
             if (product != null)
             {
                 product.Name = productUpdate.Name;
@@ -65,7 +65,7 @@ namespace OnlineShop.Infrastructure.Repositories
 
         public async Task<List<Product>> Search(string keyWords)
         {
-            var products = _appDbContext.Products.ToList().Where(product =>
+            var products =  _appDbContext.Products.ToList().Where(product =>
             {
                 var searchingLine = (product.Name + product.Description).Replace(" ", "").ToLower();
                 var keys = keyWords.ToLower().Split();

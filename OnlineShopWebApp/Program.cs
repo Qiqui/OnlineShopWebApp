@@ -74,7 +74,7 @@ using (var serviceScope = app.Services.CreateScope())
     var services = serviceScope.ServiceProvider;
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    // IdentityInitializer.Initialize(userManager, rolesManager); РЕШИТЬ ПОЗЖЕ, НУЖЕН ИЛИ НЕТ \\\\\\\\\\\\\\\
+    // IdentityInitializer.Initialize(userManager, rolesManager); TODO: РЕШИТЬ ПОЗЖЕ, НУЖЕН ИЛИ НЕТ.
 }
 
 app.UseHttpsRedirection();
