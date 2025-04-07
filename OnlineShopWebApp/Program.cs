@@ -5,6 +5,7 @@ using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Identity;
 using OnlineShop.Infrastructure.Persistence;
 using OnlineShop.Infrastructure.Repositories;
+using OnlineShop.Infrastructure.Services;
 using Serilog;
 using System.Globalization;
 
@@ -41,6 +42,7 @@ builder.Services.AddScoped<ICartsRepository, CartsRepository>();
 builder.Services.AddScoped<ICompareRepository, CompareRepository>();
 builder.Services.AddScoped<IFavouritesRepository, FavouritesRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllersWithViews();
 

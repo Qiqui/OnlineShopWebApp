@@ -18,24 +18,24 @@ namespace OnlineShop.Infrastructure.Repositories
         }
 
 
-        public async Task<Favourites?> GetById(string userId)
+        public async Task<Favourites?> GetByIdAsync(string userId)
         {
             return  await _appDbContext.Favourites
                 .Include(favourite => favourite.Products)
                 .FirstOrDefaultAsync(favorites => favorites.UserId == userId);
         }
-        public async Task<Product?> GetProductById(Guid Id)
+        public async Task<Product?> GetProductByIdAsync(Guid Id)
         {
             return await _appDbContext.Products
                 .FirstOrDefaultAsync(product => product.Id == Id);
         }
 
-        public async Task Add(Guid id, string userId)
+        public async Task AddAsync(Guid id, string userId)
         {
-            var favorites = await GetById(userId);
+            var favorites = await GetByIdAsync(userId);
             if (favorites != null)
             {
-                var product = await GetProductById(id);
+                var product = await GetProductByIdAsync(id);
                 if (product != null && !favorites.Products.Contains(product))
                     favorites.Products.Add(product);
             }
@@ -43,7 +43,7 @@ namespace OnlineShop.Infrastructure.Repositories
             {
                 var newFavorites = new Favourites { UserId = userId };
                 await _appDbContext.Favourites.AddAsync(newFavorites);
-                var product = await GetProductById(id);
+                var product = await GetProductByIdAsync(id);
                 if (product != null)
                     newFavorites.Products.Add(product);
             }
@@ -51,12 +51,12 @@ namespace OnlineShop.Infrastructure.Repositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task Remove(Guid id, string userId)
+        public async Task RemoveAsync(Guid id, string userId)
         {
-            var favorites = await GetById(userId);
+            var favorites = await GetByIdAsync(userId);
             if (favorites != null)
             {
-                var product = await GetProductById(id);
+                var product = await GetProductByIdAsync(id);
                 if (product != null)
                     favorites.Products.Remove(product);
             }

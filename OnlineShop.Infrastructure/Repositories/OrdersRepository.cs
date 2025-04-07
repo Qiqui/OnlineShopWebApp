@@ -19,7 +19,7 @@ namespace OnlineShop.Infrastructure.Repositories
             _userManager = userManager; // TODO: Убрать, возможно не понадобится
         }
 
-        public async Task<Order?> GetById(Guid id)
+        public async Task<Order?> GetByIdAsync(Guid id)
         {
             return  await _databaseContext.Orders
                 .Include(order => order.UserId)
@@ -29,7 +29,7 @@ namespace OnlineShop.Infrastructure.Repositories
                 .FirstOrDefaultAsync(order => order.Id == id);
         }
 
-        public async Task<List<Order>> GetByUserId(string userId)
+        public async Task<List<Order>> GetByUserIdAsync(string userId)
         {
             return await _databaseContext.Orders
                 .Include(order => order.UserId)
@@ -40,7 +40,7 @@ namespace OnlineShop.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Order?> GetLastByUserId(string userId)
+        public async Task<Order?> GetLastByUserIdAsync(string userId)
         {
             return _databaseContext.Orders
                 .Where(order => order.UserId == userId)
@@ -48,7 +48,7 @@ namespace OnlineShop.Infrastructure.Repositories
                 .FirstOrDefault();
         }
 
-        public async Task<List<CartPosition>> GetCartPositions(Guid id)
+        public async Task<List<CartPosition>> GetCartPositionsAsync(Guid id)
         {
             var cart = await _databaseContext.Carts
                 .Include(cart => cart.Positions)
@@ -57,14 +57,14 @@ namespace OnlineShop.Infrastructure.Repositories
             return cart?.Positions ?? new List<CartPosition>();
         }
 
-        public async Task<int> IncreaseNumber()
+        public async Task<int> IncreaseNumberAsync()
         {
             return await _databaseContext.Orders.CountAsync() + 1;
         }
 
-        public async Task<bool> Add(Guid cartId, string userId, ContactInfo contactInfo)
+        public async Task<bool> AddAsync(Guid cartId, string userId, ContactInfo contactInfo)
         {
-            var cartPositions = await GetCartPositions(cartId);
+            var cartPositions = await GetCartPositionsAsync(cartId);
             //var user = await _userManager.FindByIdAsync(userId); TODO: УДАЛИТЬ, СКОРЕЕ ВСЕГО НЕ ПОНАДОБИТСЯ
             if (cartPositions != null)
             {
@@ -74,7 +74,7 @@ namespace OnlineShop.Infrastructure.Repositories
                     Positions = cartPositions.ToOrderPositions(),
                     ContactInfo = contactInfo,
                     CreateDate = DateTime.Now,
-                    Number = await IncreaseNumber()
+                    Number = await IncreaseNumberAsync()
                 };
 
                await _databaseContext.Orders.AddAsync(order);
@@ -86,7 +86,7 @@ namespace OnlineShop.Infrastructure.Repositories
             return false;
         }
 
-        public async Task<List<Order>> GetAll()
+        public async Task<List<Order>> GetAllAsync()
         {
             return await _databaseContext.Orders
                 .Include(order => order.UserId)
@@ -96,9 +96,9 @@ namespace OnlineShop.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<bool> UpdateStatus(Guid id, OrderStatusEnum status)
+        public async Task<bool> UpdateStatusAsync(Guid id, OrderStatusEnum status)
         {
-            var order = await GetById(id);
+            var order = await GetByIdAsync(id);
             if (order != null)
             {
                 order.Status = status;

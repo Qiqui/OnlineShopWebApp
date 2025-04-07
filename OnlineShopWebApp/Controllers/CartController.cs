@@ -1,42 +1,36 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
+using OnlineShop.Application.Interfaces;
+using OnlineShop.Infrastructure.Identity;
 using OnlineShopWebApp.Helpers;
-
+using OnlineShopWebApp.Models;
 namespace OnlineShopWebApp.Controllers
 {
-    [Authorize]
+    //[Authorize] TODO: Раскомитить попозже
     public class CartController : Controller
     {
-        private readonly IProductsRepository _productsRepository;
-        private readonly ICartsRepository _cartsRepository;
-        private readonly UserManager<User> _userManager;
+        private readonly IProductService _productService;
+        private readonly ICartService _cartService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CartController(IProductsRepository productsRepository, ICartsRepository cartRepository, UserManager<User> userManager)
+        public CartController(IProductService productService, ICartService cartsService, UserManager<AppUser> userManager)
         {
-            _productsRepository = productsRepository;
-            _cartsRepository = cartRepository;
+            _productService = productService;
+            _cartService = cartsService;
             _userManager = userManager;
         }
 
-        public IActionResult Index(string userName)
+        public async Task<IActionResult> Index(string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
-            var cart = _cartsRepository.TryGetById(user.Id);
-            if (cart == null)
-            {
-                _cartsRepository.Add(user);
-                cart = _cartsRepository.TryGetById(user.Id);
-            }
+            var cart = await _cartService.Get(userName);
 
             var cartVM = cart.ToCartViewModel();
 
             return View(cartVM);
         }
 
-        public IActionResult Add(Guid id, string userName)
+        /*public IActionResult AddPosition(Guid id, string userName)
         {
             var product = _productsRepository.TryGetById(id);
 
@@ -52,7 +46,7 @@ namespace OnlineShopWebApp.Controllers
             return View("index", cartVM);
         }
 
-        public IActionResult Remove(Guid id, string userName)
+        public IActionResult RemovePosition(Guid id, string userName)
         {
             var product = _productsRepository.TryGetById(id);
 
@@ -78,6 +72,6 @@ namespace OnlineShopWebApp.Controllers
             }
 
             return View("index");
-        }
+        }*/
     }
 }

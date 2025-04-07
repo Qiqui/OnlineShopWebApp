@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Entities;
+using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Persistence;
 
 namespace OnlineShop.Infrastructure.Repositories
@@ -9,15 +9,13 @@ namespace OnlineShop.Infrastructure.Repositories
     public class CartsRepository : ICartsRepository
     {
         private readonly AppDbContext _appDbContext;
-        private readonly UserManager<User> _userManager;
 
-        public CartsRepository(AppDbContext appDbContext, UserManager<User> userManager)
+        public CartsRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-            _userManager = userManager;
         }
 
-        public async Task<Cart?> GetById(string userId)
+        public async Task<Cart?> GetByIdAsync(string userId)
         {
             return await _appDbContext.Carts
                 .Include(cart => cart.Positions)
@@ -25,18 +23,17 @@ namespace OnlineShop.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cart => cart.UserId == userId);
         }
 
-        public async Task Add(string userId)
+        public async Task<Cart> CreateCartAsync(string userId)
         {
-            await _appDbContext.Carts.AddAsync(new Cart { UserId = userId });
+            var cart = new Cart { UserId = userId };
+            await _appDbContext.Carts.AddAsync(cart);
             await _appDbContext.SaveChangesAsync();
+
+            return cart;
         }
 
-        public async Task Add(Product product, string userId)
+        public async Task AddPositionAsync(Cart cart, Product product)
         {
-            var cart = await GetById(userId);
-            cart ??= new Cart { UserId = userId };
-            if(!await _appDbContext.Carts.ContainsAsync(cart))
-                await _appDbContext.Carts.AddAsync(cart);
 
             var position = cart.Positions.FirstOrDefault(cartPosition => cartPosition.Product.Id == product.Id);
 
@@ -54,9 +51,8 @@ namespace OnlineShop.Infrastructure.Repositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task Remove(Product product, string userId)
+        public async Task RemovePositionAsync(Cart cart, Product product)
         {
-            var cart = await GetById(userId);
             var position = cart.Positions.FirstOrDefault(cartPosition => cartPosition.Product.Id == product.Id);
             if (position != null)
             {
@@ -69,9 +65,9 @@ namespace OnlineShop.Infrastructure.Repositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task<bool> Clear(string userId)
+        public async Task<bool> ClearAsync(string userId)
         {
-            var cart = await GetById(userId);
+            var cart = await GetByIdAsync(userId);
             if (cart != null)
             {
                 cart.Positions.Clear();

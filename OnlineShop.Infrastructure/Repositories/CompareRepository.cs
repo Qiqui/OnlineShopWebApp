@@ -19,25 +19,25 @@ namespace OnlineShop.Infrastructure.Repositories
         }
 
 
-        public async Task<Compare?> GetById(string userId)
+        public async Task<Compare?> GetByIdAsync(string userId)
         {
             return await _appDbContext.Compares
                 .Include(compare => compare.Products)
                 .FirstOrDefaultAsync(productsCompare => productsCompare.UserId == userId);
         }
 
-        public async Task<Product?> GetProductById(Guid Id)
+        public async Task<Product?> GetProductByIdAsync(Guid Id)
         {
             return await _appDbContext.Products
                 .FirstOrDefaultAsync(product => product.Id == Id);
         }
 
-        public async Task Add(Guid id, string userId)
+        public async Task AddAsync(Guid id, string userId)
         {
-            var compare = await GetById(userId);
+            var compare = await GetByIdAsync(userId);
             if (compare != null)
             {
-                var product = await GetProductById(id);
+                var product = await GetProductByIdAsync(id);
                 if (product == null)
                     return;
 
@@ -61,7 +61,7 @@ namespace OnlineShop.Infrastructure.Repositories
             {
                 compare = new Compare { UserId = userId };
                 await _appDbContext.Compares.AddAsync(compare);
-                var product = await GetProductById(id);
+                var product = await GetProductByIdAsync(id);
                 if (product != null)
                     compare.Products.Add(product);
 
@@ -69,12 +69,12 @@ namespace OnlineShop.Infrastructure.Repositories
             }
         }
 
-        public async Task Remove(Guid id, string userId)
+        public async Task RemoveAsync(Guid id, string userId)
         {
-            var productsCompare = await GetById(userId);
+            var productsCompare = await GetByIdAsync(userId);
             if (productsCompare != null)
             {
-                var product = await GetProductById(id);
+                var product = await GetProductByIdAsync(id);
                 if (product != null)
                     productsCompare.Products.Remove(product);
             }

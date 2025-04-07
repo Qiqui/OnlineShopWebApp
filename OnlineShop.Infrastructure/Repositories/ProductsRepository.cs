@@ -15,24 +15,24 @@ namespace OnlineShop.Infrastructure.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<List<Product>> GetAll()
+        public async Task<List<Product>> GetAllAsync()
         {
             return await _appDbContext.Products.ToListAsync();
         }
 
-        public async Task<Product?> GetById(Guid id)
+        public async Task<Product?> GetByIdAsync(Guid id)
         {
             return await _appDbContext.Products.FirstOrDefaultAsync(product => product.Id == id);
         }
-        public async Task Add(Product product)
+        public async Task AddAsync(Product product)
         {
            await _appDbContext.Products.AddAsync(product);
            await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task<bool> Remove(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            var product = await GetById(id);
+            var product = await GetByIdAsync(id);
             if (product != null)
             {
                 _appDbContext.Products.Remove(product);
@@ -43,9 +43,9 @@ namespace OnlineShop.Infrastructure.Repositories
             return false;
         }
 
-        public async Task Update(Guid id, Product productUpdate)
+        public async Task UpdateAsync(Guid id, Product productUpdate)
         {
-            var product = await GetById(id);
+            var product = await GetByIdAsync(id);
             if (product != null)
             {
                 product.Name = productUpdate.Name;
@@ -63,7 +63,7 @@ namespace OnlineShop.Infrastructure.Repositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Product>> Search(string keyWords)
+        public async Task<List<Product>> SearchAsync(string keyWords)
         {
             var products =  _appDbContext.Products.ToList().Where(product =>
             {

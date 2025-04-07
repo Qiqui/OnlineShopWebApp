@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OnlineShop.Db.Models;
+using OnlineShop.Domain.Entities;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Helpers
