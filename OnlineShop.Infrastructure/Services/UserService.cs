@@ -5,7 +5,7 @@ using OnlineShop.Infrastructure.Identity;
 
 namespace OnlineShop.Infrastructure.Services
 {
-    public class UserService : IUserService
+    public class UserService : IUsersService
     {
         private readonly UserManager<AppUser> _userManager;
 
@@ -17,10 +17,8 @@ namespace OnlineShop.Infrastructure.Services
         public async Task<string?> GetCurrentUserIdAsync(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
-            if (user == null)
-                throw new NotFoundException("Не удалось идентефицировать пользователя");
 
-            return user.Id;
+            return user?.Id ?? throw new NotFoundException("Не удалось идентефицировать пользователя"); ;
         }
     }
 }

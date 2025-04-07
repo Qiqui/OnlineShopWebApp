@@ -42,7 +42,7 @@ builder.Services.AddScoped<ICartsRepository, CartsRepository>();
 builder.Services.AddScoped<ICompareRepository, CompareRepository>();
 builder.Services.AddScoped<IFavouritesRepository, FavouritesRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUsersService, UserService>();
 
 builder.Services.AddControllersWithViews();
 

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Application.Interfaces;
+using OnlineShop.Domain.Exceptions;
+using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Identity;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
@@ -11,42 +13,48 @@ namespace OnlineShopWebApp.Controllers
     public class CartController : Controller
     {
         private readonly IProductService _productService;
-        private readonly ICartService _cartService;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly ICartService _cartsService;
+        private readonly IUsersService _usersService;
 
-        public CartController(IProductService productService, ICartService cartsService, UserManager<AppUser> userManager)
+        public CartController(IProductService productService, ICartService cartsService, IUsersService usersService)
         {
             _productService = productService;
-            _cartService = cartsService;
-            _userManager = userManager;
+            _cartsService = cartsService;
+            _usersService = usersService;
         }
 
         public async Task<IActionResult> Index(string userName)
         {
-            var cart = await _cartService.Get(userName);
+            var cart = await _cartsService.GetByIdAsync(userName);
 
             var cartVM = cart.ToCartViewModel();
 
             return View(cartVM);
         }
 
-        /*public IActionResult AddPosition(Guid id, string userName)
+        public async Task<IActionResult> AddPosition(Guid productId, string userName)
         {
-            var product = _productsRepository.TryGetById(id);
+            try
+            {
 
-            if (product == null)
-                return View("Add", "Ошибка. Товар не был добавлен");
+                var product = await _productService.GetByIdAsync(productId);
 
-            var user = _userManager.FindByNameAsync(userName).Result;
-            _cartsRepository.Add(product, user);
+                var userId = await _usersService.GetCurrentUserIdAsync(userName);
+                await _cartsService.AddPositionAsync(product, userId);
 
-            var cart = _cartsRepository.TryGetById(user.Id);
-            var cartVM = cart.ToCartViewModel();
+                var cart = await _cartsService.GetByIdAsync(userId);
+                var cartVM = cart.ToCartViewModel();
 
-            return View("index", cartVM);
+                return View("index", cartVM);
+            }
+
+            catch(NotFoundException ex)
+            {
+                return RedirectToAction("Inxex"); //TODO: Сделать View для ошибки NotFound
+            }
         }
 
-        public IActionResult RemovePosition(Guid id, string userName)
+        public IActionResult RemovePosition(Guid productId, string userName)
         {
             var product = _productsRepository.TryGetById(id);
 
@@ -72,6 +80,6 @@ namespace OnlineShopWebApp.Controllers
             }
 
             return View("index");
-        }*/
+        }
     }
 }
