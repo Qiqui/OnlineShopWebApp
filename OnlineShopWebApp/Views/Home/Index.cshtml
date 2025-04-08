@@ -59,7 +59,7 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <a asp-controller="Cart" asp-action="Add" asp-route-Id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark"> Добавить в корзину </a>
-                    <a asp-controller="Compare" asp-action="Add" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark">Сравнить</a>
+                    <a asp-controller="Compare" asp-action="Add" asp-route-productId="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark">Сравнить</a>
                     <a asp-controller="Favorites" asp-action="Add" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-danger">Добавить в избранное</a>
                 }
             </div>

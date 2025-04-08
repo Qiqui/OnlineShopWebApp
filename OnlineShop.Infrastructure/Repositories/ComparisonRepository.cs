@@ -7,19 +7,19 @@ using OnlineShop.Infrastructure.Persistence;
 
 namespace OnlineShop.Infrastructure.Repositories
 {
-    public class ComparesRepository : IComparesRepository
+    public class ComparisonRepository : IComparisonRepository
     {
         private readonly AppDbContext _appDbContext;
         private readonly UserManager<User> _userManager; //TODO: Убрать, возможно, не понадобится
 
-        public ComparesRepository(AppDbContext appDbContext, UserManager<User> userManager)
+        public ComparisonRepository(AppDbContext appDbContext, UserManager<User> userManager)
         {
             this._appDbContext = appDbContext;
             _userManager = userManager;
         }
 
 
-        public async Task<Compare?> GetByIdAsync(string userId)
+        public async Task<Comparison?> GetByIdAsync(string userId)
         {
             return await _appDbContext.Compares
                 .Include(compare => compare.Products)
@@ -59,7 +59,7 @@ namespace OnlineShop.Infrastructure.Repositories
 
             else
             {
-                compare = new Compare { UserId = userId };
+                compare = new Comparison { UserId = userId };
                 await _appDbContext.Compares.AddAsync(compare);
                 var product = await GetProductByIdAsync(id);
                 if (product != null)

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿/*using Microsoft.AspNetCore.Identity;
 using OnlineShop.Domain.Entities;
 using OnlineShopWebApp.Models;
 
@@ -144,9 +144,9 @@ namespace OnlineShopWebApp.Helpers
             return cartPositions;
         }
 
-        public static CompareViewModel ToCompareViewModel(this Compare compare)
+        public static ComparisonViewModel ToCompareViewModel(this Comparison compare)
         {
-            return new CompareViewModel
+            return new ComparisonViewModel
             {
                 Id = compare.Id,
                 Products = ToProductsViewModel(compare.Products)
@@ -338,4 +338,4 @@ namespace OnlineShopWebApp.Helpers
             return rolesVM;
         }
     }
-}
+}*/

@@ -7,7 +7,7 @@ using OnlineShop.Domain.Interfaces;
 
 namespace OnlineShop.Application.Services
 {
-    class CartsService : ICartsService
+    public class CartsService : ICartsService
     {
         private readonly IProductsService _productsService;
         private readonly ICartsRepository _cartsRepository;
@@ -24,7 +24,7 @@ namespace OnlineShop.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<Cart> GetByIdAsync(string userName)
+        private async Task<Cart> GetByNameAsync(string userName)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace OnlineShop.Application.Services
             {
                 var product = await _productsService.GetByIdAsync(productId);
                 var userId = await _usersService.GetCurrentUserIdAsync(userName);
-                var cart = await GetByIdAsync(userId);
+                var cart = await GetByNameAsync(userId);
 
                 await IncreasePosition(cart, productId);
                 await _cartsRepository.UpdateAsync(cart);
@@ -62,7 +62,7 @@ namespace OnlineShop.Application.Services
             }
         }
 
-        public async Task IncreasePosition(Cart cart, Guid productId)
+        private async Task IncreasePosition(Cart cart, Guid productId)
         {
             var product = await _productsService.GetByIdAsync(productId);
 
@@ -85,7 +85,7 @@ namespace OnlineShop.Application.Services
             try
             {
                 var userId = await _usersService.GetCurrentUserIdAsync(userName);
-                var cart = await GetByIdAsync(userId);
+                var cart = await GetByNameAsync(userId);
 
                 await DecreasePositionAsync(cart, productId);
                 await _cartsRepository.UpdateAsync(cart);
@@ -101,7 +101,7 @@ namespace OnlineShop.Application.Services
             }
         }
 
-        public async Task DecreasePositionAsync(Cart cart, Guid productId)
+        private async Task DecreasePositionAsync(Cart cart, Guid productId)
         {
             var product = await _productsService.GetByIdAsync(productId);
 
@@ -120,7 +120,7 @@ namespace OnlineShop.Application.Services
             try
             {
                 var userId = await _usersService.GetCurrentUserIdAsync(userName);
-                var cart = await GetByIdAsync(userId);
+                var cart = await GetByNameAsync(userId);
 
                 if (cart != null)
                 {
@@ -135,7 +135,23 @@ namespace OnlineShop.Application.Services
             }
         }
 
-        public CartDTO GetCartDTO(Cart cart)
+        public async Task<CartDTO> GetCartDtoAsync(string userName)
+        {
+            try
+            {
+                var cart = await GetByNameAsync(userName);
+                var cartDTO = _mapper.Map<CartDTO>(cart);
+
+                return cartDTO;
+            }
+
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message);
+            }
+        }
+
+        private CartDTO GetCartDTO(Cart cart)
         {
             var cartDTO = _mapper.Map<CartDTO>(cart);
 

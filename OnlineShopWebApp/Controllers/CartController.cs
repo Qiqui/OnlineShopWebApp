@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Application.DTOs;
 using OnlineShop.Application.Interfaces;
 using OnlineShop.Domain.Exceptions;
-using OnlineShop.Domain.Interfaces;
-using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
 
@@ -13,24 +11,20 @@ namespace OnlineShopWebApp.Controllers
     //[Authorize] TODO: Раскомитить попозже
     public class CartController : Controller
     {
-        private readonly IProductsService _productService;
         private readonly ICartsService _cartsService;
-        private readonly IUsersService _usersService;
         private readonly IMapper _mapper;
 
-        public CartController(IProductsService productService, ICartsService cartsService, IUsersService usersService, IMapper mapper)
+        public CartController(ICartsService cartsService, IMapper mapper)
         {
-            _productService = productService;
             _cartsService = cartsService;
-            _usersService = usersService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> Index(string userName)
         {
-            var cart = await _cartsService.GetByIdAsync(userName);
+            var cartDTO = await _cartsService.GetCartDtoAsync(userName);
 
-            var cartVM = cart.ToCartViewModel();
+            var cartVM = GetCartViewModel(cartDTO);
 
             return View(cartVM);
         }

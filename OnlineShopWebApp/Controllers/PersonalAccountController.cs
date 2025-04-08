@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
@@ -48,11 +46,11 @@ namespace OnlineShopWebApp.Controllers
 
             var user = _userManager.FindByIdAsync(userVM.Id).Result;
             user.UpdateByUserViewModel(userVM);
-            if(userVM.ImagePath != null)
+            if (userVM.ImagePath != null)
                 user.ImagePath = userVM.ImagePath;
 
             var isUpdated = _userManager.UpdateAsync(user).Result;
-            if(!isUpdated.Succeeded)
+            if (!isUpdated.Succeeded)
             {
                 ModelState.AddModelError("", "Произошла ошибка при обновлении данных пользователя");
                 return View(userVM);
@@ -61,7 +59,7 @@ namespace OnlineShopWebApp.Controllers
             return RedirectToAction(nameof(Index), "Home");
         }
 
-        public IActionResult Orders (string userId)
+        public IActionResult Orders(string userId)
         {
             var orders = _ordersRepository.TryGetByUserId(userId);
             var ordersVM = orders.ToOrdersViewModel();

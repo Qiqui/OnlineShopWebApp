@@ -17,7 +17,7 @@ namespace OnlineShop.Application.DTOs
         public CategoryEnum Category { get; set; }
         public List<string> ImagePaths { get; set; } = new List<string>();
         public List<CartPositionDTO> CartPositions { get; set; }
-        /*public List<Compare> Compares { get; set; }
-        public List<Favourites> Favourites { get; set; }*/
+        public List<ComparisonDTO> Compares { get; set; }
+        public List<FavouritesDTO> Favourites { get; set; }
     }
 }

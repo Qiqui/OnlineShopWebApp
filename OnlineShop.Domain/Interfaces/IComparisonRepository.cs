@@ -2,9 +2,9 @@
 
 namespace OnlineShop.Domain.Interfaces
 {
-    public interface IComparesRepository
+    public interface IComparisonRepository
     {
-        Task<Compare?> GetByIdAsync(string userId);
+        Task<Comparison?> GetByIdAsync(string userId);
         Task<Product?> GetProductByIdAsync(Guid Id);
         Task AddAsync(Guid id, string userId);
         Task RemoveAsync(Guid id, string userId);

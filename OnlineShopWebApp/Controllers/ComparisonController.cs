@@ -1,28 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
+using OnlineShop.Application.Interfaces;
 using OnlineShopWebApp.Helpers;
 
 namespace OnlineShopWebApp.Controllers
 {
     [Authorize]
-    public class CompareController : Controller
+    public class ComparisonController : Controller
     {
-        private readonly IProductsRepository _productsRepository;
-        private readonly ICompareRepository _productsCompareRepository;
-        private readonly UserManager<User> _userManager;
+        private readonly IProductsService _productsService;
+        private readonly IComparisonService _comparesService;
 
-        public CompareController(IProductsRepository productsRepository, ICompareRepository productCompare, UserManager<User> userManager)
+        public ComparisonController(IProductsService productsService, IComparisonService comparesService)
         {
-            _productsRepository = productsRepository;
-            _productsCompareRepository = productCompare;
-            _userManager = userManager;
+            _productsService = productsService;
+            _comparesService = comparesService;
         }
 
-        public IActionResult Index(string userName, User user)
+        public async Task<IActionResult> Index(string userName)
         {
+            var ComparesDTO = _comparesService.GetByNameAsync(userName);
+
             if (user.Name == null)
                 user = _userManager.FindByNameAsync(userName).Result;
 

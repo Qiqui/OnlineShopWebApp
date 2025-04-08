@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Application.Interfaces;
 using OnlineShop.Application.Profiles;
+using OnlineShop.Application.Services;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Identity;
 using OnlineShop.Infrastructure.Persistence;
@@ -43,7 +45,8 @@ builder.Services.AddAutoMapper(typeof(CartProfile).Assembly, typeof(ProductViewM
 // Add services to the container.
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<ICartsRepository, CartsRepository>();
-builder.Services.AddScoped<IComparesRepository, ComparesRepository>();
+builder.Services.AddScoped<ICartsService, CartsService>();
+builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
 builder.Services.AddScoped<IFavouritesRepository, FavouritesRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<IUsersService, UserService>();
