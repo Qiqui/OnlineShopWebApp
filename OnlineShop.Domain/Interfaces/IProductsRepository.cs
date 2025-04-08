@@ -4,7 +4,7 @@ namespace OnlineShop.Domain.Interfaces
 {
     public interface IProductsRepository
     {
-        Task AddAsync(Product product);
+        Task CreateAsync(Product product);
         Task<bool> RemoveAsync(Guid id);
         Task UpdateAsync(Guid id, Product product);
         Task<List<Product>> GetAllAsync();

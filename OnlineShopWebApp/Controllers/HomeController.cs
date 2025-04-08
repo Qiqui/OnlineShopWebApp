@@ -1,5 +1,6 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShopWebApp.Helpers;
+using OnlineShop.Application.Interfaces;
 using OnlineShopWebApp.Models;
 using System.Diagnostics;
 
@@ -7,16 +8,20 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IProductsRepository _productsRepository;
+        private readonly IProductsService _productsService;
+        private readonly IMapper _mapper;
 
-        public HomeController(IProductsRepository productsRepository)
+        public HomeController(IProductsService productsService, IMapper mapper)
         {
-            _productsRepository = productsRepository;
+            _productsService = productsService;
+            _mapper = mapper;
         }
+
         public IActionResult Index()
         {
-            var products = _productsRepository.GetAll();
-            var productsVM = products.ToProductsViewModel();
+            var productsDTO = _productsService.GetAllAsync();
+            var productsVM = _mapper.Map<List<ProductViewModel>>(productsDTO);
+
             return View(productsVM);
         }
 

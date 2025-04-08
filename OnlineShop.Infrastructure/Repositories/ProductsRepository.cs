@@ -24,7 +24,7 @@ namespace OnlineShop.Infrastructure.Repositories
         {
             return await _appDbContext.Products.FirstOrDefaultAsync(product => product.Id == id);
         }
-        public async Task AddAsync(Product product)
+        public async Task CreateAsync(Product product)
         {
            await _appDbContext.Products.AddAsync(product);
            await _appDbContext.SaveChangesAsync();

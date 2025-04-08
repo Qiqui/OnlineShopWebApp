@@ -44,10 +44,12 @@ builder.Services.AddAutoMapper(typeof(CartProfile).Assembly, typeof(ProductViewM
 
 // Add services to the container.
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<ICartsRepository, CartsRepository>();
 builder.Services.AddScoped<ICartsService, CartsService>();
 builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
 builder.Services.AddScoped<IFavouritesRepository, FavouritesRepository>();
+builder.Services.AddScoped<IFavouritesService, FavouritesService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<IUsersService, UserService>();
 

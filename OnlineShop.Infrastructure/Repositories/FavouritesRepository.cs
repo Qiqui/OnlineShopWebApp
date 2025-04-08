@@ -17,6 +17,15 @@ namespace OnlineShop.Infrastructure.Repositories
             _userManager = userManager;
         }
 
+        public async Task<Favourites> CreateFavouritesAsync(string userId)
+        {
+            var favourites = new Favourites { UserId = userId };
+            await _appDbContext.Favourites.AddAsync(favourites);
+
+            await _appDbContext.SaveChangesAsync();
+
+            return favourites;
+        }
 
         public async Task<Favourites?> GetByIdAsync(string userId)
         {
@@ -30,37 +39,8 @@ namespace OnlineShop.Infrastructure.Repositories
                 .FirstOrDefaultAsync(product => product.Id == Id);
         }
 
-        public async Task AddAsync(Guid id, string userId)
+        public async Task Update(Favourites favourites)
         {
-            var favorites = await GetByIdAsync(userId);
-            if (favorites != null)
-            {
-                var product = await GetProductByIdAsync(id);
-                if (product != null && !favorites.Products.Contains(product))
-                    favorites.Products.Add(product);
-            }
-            else
-            {
-                var newFavorites = new Favourites { UserId = userId };
-                await _appDbContext.Favourites.AddAsync(newFavorites);
-                var product = await GetProductByIdAsync(id);
-                if (product != null)
-                    newFavorites.Products.Add(product);
-            }
-
-            await _appDbContext.SaveChangesAsync();
-        }
-
-        public async Task RemoveAsync(Guid id, string userId)
-        {
-            var favorites = await GetByIdAsync(userId);
-            if (favorites != null)
-            {
-                var product = await GetProductByIdAsync(id);
-                if (product != null)
-                    favorites.Products.Remove(product);
-            }
-
             await _appDbContext.SaveChangesAsync();
         }
     }

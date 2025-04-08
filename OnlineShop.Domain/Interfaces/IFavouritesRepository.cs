@@ -6,7 +6,7 @@ namespace OnlineShop.Domain.Interfaces
     {
         Task<Favourites?> GetByIdAsync(string userId);
         Task<Product?> GetProductByIdAsync(Guid Id);
-        Task AddAsync(Guid id, string userId);
-        Task RemoveAsync(Guid id, string userId);
+        Task Update(Favourites favourites);
+        Task<Favourites> CreateFavouritesAsync(string userId);
     }
 }

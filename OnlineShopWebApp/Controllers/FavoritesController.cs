@@ -1,56 +1,78 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShopWebApp.Helpers;
+using OnlineShop.Application.DTOs;
+using OnlineShop.Application.Interfaces;
+using OnlineShop.Domain.Exceptions;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
     [Authorize]
     public class FavoritesController : Controller
     {
-        private readonly IProductsRepository _productsRepository;
-        private readonly IFavouritesRepository _favoritesRepository;
-        private readonly UserManager<User> _userManager;
+        private readonly IFavouritesService _favouritesService;
+        private IMapper _mapper;
 
-        public FavoritesController(IProductsRepository productsRepository, IFavouritesRepository favoritesRepository, UserManager<User> userManager)
+        public FavoritesController(IFavouritesService favouritesService, IMapper mapper)
         {
-            _productsRepository = productsRepository;
-            _favoritesRepository = favoritesRepository;
-            _userManager = userManager;
+            _favouritesService = favouritesService;
+            _mapper = mapper;
         }
 
-        public IActionResult Index(string userName, User user)
+        public async Task<IActionResult> Index(string userName)
         {
-            if (user.Name == null)
-                user = _userManager.FindByNameAsync(userName).Result;
+            try
+            {
+                var favouritesDTO = await _favouritesService.GetFavouritesDtoAsync(userName);
+                var favouritesVM = GetFavouritesViewModel(favouritesDTO);
 
-            var favorites = _favoritesRepository.TryGetById(user.Id);
-            if (favorites == null)
-                return View(null);
+                return View(favouritesVM);
+            }
 
-            var favoritesVM = favorites.ToFavouritesViewModel();
-
-            return View(favoritesVM);
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message);
+            }
         }
 
-        public IActionResult Add(Guid id, string userName)
+        public async Task<IActionResult> Add(Guid productId, string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
-            var product = _productsRepository.TryGetById(id);
-            if (product != null)
-                _favoritesRepository.Add(id, user.Id);
+            try
+            {
+                var favouritesDTO = await _favouritesService.AddProductAsync(productId, userName);
+                var favouritesVM = GetFavouritesViewModel(favouritesDTO);
 
-            return RedirectToAction(nameof(Index), user);
+                return View(nameof(Index), favouritesVM);
+            }
+
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message);
+            }
         }
 
-        public IActionResult Remove(Guid id, string userName)
+        public async Task<IActionResult> Remove(Guid productId, string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
-            var product = _productsRepository.TryGetById(id);
-            if (product != null)
-                _favoritesRepository.Remove(id, user.Id);
+            try
+            {
+                var favouritesDTO = await _favouritesService.RemoveProductAsync(productId, userName);
+                var favouritesVM = GetFavouritesViewModel(favouritesDTO);
 
-            return RedirectToAction(nameof(Index), user);
+                return View(nameof(Index), favouritesVM);
+            }
+
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message);
+            }
+        }
+
+        public FavouritesViewModel GetFavouritesViewModel(FavouritesDTO favouritesDTO)
+        {
+            var favouritesVM = _mapper.Map<FavouritesViewModel>(favouritesDTO);
+
+            return favouritesVM;
         }
     }
 }

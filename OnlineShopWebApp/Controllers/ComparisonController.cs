@@ -11,13 +11,11 @@ namespace OnlineShopWebApp.Controllers
     [Authorize]
     public class ComparisonController : Controller
     {
-        private readonly IProductsService _productsService;
         private readonly IComparisonService _comparisonService;
         private readonly IMapper _mapper;
 
-        public ComparisonController(IProductsService productsService, IComparisonService comparesService, IMapper mapper)
+        public ComparisonController(IComparisonService comparesService, IMapper mapper)
         {
-            _productsService = productsService;
             _comparisonService = comparesService;
             _mapper = mapper;
         }
