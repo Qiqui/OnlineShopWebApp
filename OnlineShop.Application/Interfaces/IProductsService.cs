@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Application.Interfaces
 {
-    public interface IProductService
+    public interface IProductsService
     {
         Task<Product> GetByIdAsync(Guid productId);
     }

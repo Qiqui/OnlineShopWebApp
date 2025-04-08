@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Persistence;
@@ -32,50 +31,9 @@ namespace OnlineShop.Infrastructure.Repositories
             return cart;
         }
 
-        public async Task AddPositionAsync(Cart cart, Product product)
+        public async Task UpdateAsync(Cart cart)
         {
-
-            var position = cart.Positions.FirstOrDefault(cartPosition => cartPosition.Product.Id == product.Id);
-
-            if (position != null)
-                position.Quantity++;
-
-            else
-                cart.Positions.Add(new CartPosition
-                {
-                    Product = product,
-                    Quantity = 1,
-                    Cart = cart
-                });
-
             await _appDbContext.SaveChangesAsync();
-        }
-
-        public async Task RemovePositionAsync(Cart cart, Product product)
-        {
-            var position = cart.Positions.FirstOrDefault(cartPosition => cartPosition.Product.Id == product.Id);
-            if (position != null)
-            {
-                if (position.Quantity > 1)
-                    position.Quantity--;
-                else
-                    cart.Positions.Remove(position);
-            }
-
-            await _appDbContext.SaveChangesAsync();
-        }
-
-        public async Task<bool> ClearAsync(string userId)
-        {
-            var cart = await GetByIdAsync(userId);
-            if (cart != null)
-            {
-                cart.Positions.Clear();
-                await _appDbContext.SaveChangesAsync();
-                return true;
-            }
-
-            return false;
         }
     }
 }

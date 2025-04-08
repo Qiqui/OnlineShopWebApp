@@ -7,12 +7,12 @@ using OnlineShop.Infrastructure.Persistence;
 
 namespace OnlineShop.Infrastructure.Repositories
 {
-    public class CompareRepository : ICompareRepository
+    public class ComparesRepository : IComparesRepository
     {
         private readonly AppDbContext _appDbContext;
         private readonly UserManager<User> _userManager; //TODO: Убрать, возможно, не понадобится
 
-        public CompareRepository(AppDbContext appDbContext, UserManager<User> userManager)
+        public ComparesRepository(AppDbContext appDbContext, UserManager<User> userManager)
         {
             this._appDbContext = appDbContext;
             _userManager = userManager;

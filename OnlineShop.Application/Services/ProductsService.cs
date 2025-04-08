@@ -5,11 +5,11 @@ using OnlineShop.Domain.Interfaces;
 
 namespace OnlineShop.Application.Services
 {
-    public class ProductService : IProductService
+    public class ProductsService : IProductsService
     {
         private readonly IProductsRepository _productsRepositoty;
 
-        public ProductService(IProductsRepository productsRepositoty)
+        public ProductsService(IProductsRepository productsRepositoty)
         {
             _productsRepositoty = productsRepositoty;
         }

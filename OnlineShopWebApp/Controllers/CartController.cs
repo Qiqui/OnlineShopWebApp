@@ -1,26 +1,29 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Application.DTOs;
 using OnlineShop.Application.Interfaces;
 using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Interfaces;
-using OnlineShop.Infrastructure.Identity;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
+
+
 namespace OnlineShopWebApp.Controllers
 {
     //[Authorize] TODO: Раскомитить попозже
     public class CartController : Controller
     {
-        private readonly IProductService _productService;
-        private readonly ICartService _cartsService;
+        private readonly IProductsService _productService;
+        private readonly ICartsService _cartsService;
         private readonly IUsersService _usersService;
+        private readonly IMapper _mapper;
 
-        public CartController(IProductService productService, ICartService cartsService, IUsersService usersService)
+        public CartController(IProductsService productService, ICartsService cartsService, IUsersService usersService, IMapper mapper)
         {
             _productService = productService;
             _cartsService = cartsService;
             _usersService = usersService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index(string userName)
@@ -36,50 +39,55 @@ namespace OnlineShopWebApp.Controllers
         {
             try
             {
-
-                var product = await _productService.GetByIdAsync(productId);
-
-                var userId = await _usersService.GetCurrentUserIdAsync(userName);
-                await _cartsService.AddPositionAsync(product, userId);
-
-                var cart = await _cartsService.GetByIdAsync(userId);
-                var cartVM = cart.ToCartViewModel();
+                var cartDTO = await _cartsService.AddPositionAsync(productId, userName);
+                var cartVM = GetCartViewModel(cartDTO);
 
                 return View("index", cartVM);
             }
 
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return RedirectToAction("Inxex"); //TODO: Сделать View для ошибки NotFound
             }
         }
 
-        public IActionResult RemovePosition(Guid productId, string userName)
+        public async Task<IActionResult> RemovePosition(Guid productId, string userName)
         {
-            var product = _productsRepository.TryGetById(id);
+            try
+            {
+                var cartDTO = await _cartsService.RemovePositionAsync(productId, userName);
+                var cartVM = GetCartViewModel(cartDTO);
 
-            if (product == null)
-                return View("Ошибка. Товар не был удален");
+                return View("index", cartVM);
+            }
 
-            var user = _userManager.FindByNameAsync(userName).Result;
-            _cartsRepository.Remove(product, user);
-            var cart = _cartsRepository.TryGetById(user.Id);
-            var cartVM = cart.ToCartViewModel();
-
-            return View("index", cartVM);
+            catch (NotFoundException ex)
+            {
+                return RedirectToAction("Inxex"); //TODO: Сделать View для ошибки NotFound
+            }
         }
 
-        public IActionResult TryClear(string userName)
+        public async Task<IActionResult> ClearAsync(string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
-            var isCartCleared = _cartsRepository.Clear(user.Id);
+            try
+            {
+                await _cartsService.ClearAsync(userName);
 
-            if (!isCartCleared)
+                return View("index");
+            }
+
+            catch (NotFoundException ex)
             {
                 return View("CartClearError");
             }
 
-            return View("index");
+        }
+
+        public CartViewModel GetCartViewModel(CartDTO cartDTO)
+        {
+            var cartVM = _mapper.Map<CartViewModel>(cartDTO);
+
+            return cartVM;
         }
     }
 }

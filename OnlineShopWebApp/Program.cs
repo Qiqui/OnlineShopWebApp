@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Application.Profiles;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Identity;
 using OnlineShop.Infrastructure.Persistence;
 using OnlineShop.Infrastructure.Repositories;
 using OnlineShop.Infrastructure.Services;
+using OnlineShopWebApp.Models;
 using Serilog;
 using System.Globalization;
 
@@ -36,10 +38,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+builder.Services.AddAutoMapper(typeof(CartProfile).Assembly, typeof(ProductViewModel).Assembly);
+
 // Add services to the container.
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<ICartsRepository, CartsRepository>();
-builder.Services.AddScoped<ICompareRepository, CompareRepository>();
+builder.Services.AddScoped<IComparesRepository, ComparesRepository>();
 builder.Services.AddScoped<IFavouritesRepository, FavouritesRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<IUsersService, UserService>();
