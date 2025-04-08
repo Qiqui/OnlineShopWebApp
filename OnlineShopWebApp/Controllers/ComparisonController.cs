@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Application.DTOs;
 using OnlineShop.Application.Interfaces;
-using OnlineShopWebApp.Helpers;
+using OnlineShop.Domain.Exceptions;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -10,47 +12,69 @@ namespace OnlineShopWebApp.Controllers
     public class ComparisonController : Controller
     {
         private readonly IProductsService _productsService;
-        private readonly IComparisonService _comparesService;
+        private readonly IComparisonService _comparisonService;
+        private readonly IMapper _mapper;
 
-        public ComparisonController(IProductsService productsService, IComparisonService comparesService)
+        public ComparisonController(IProductsService productsService, IComparisonService comparesService, IMapper mapper)
         {
             _productsService = productsService;
-            _comparesService = comparesService;
+            _comparisonService = comparesService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index(string userName)
         {
-            var ComparesDTO = _comparesService.GetByNameAsync(userName);
-
-            if (user.Name == null)
-                user = _userManager.FindByNameAsync(userName).Result;
-
-            var productsCompare = _productsCompareRepository.TryGetById(user.Id);
-            if (productsCompare == null)
+            try
             {
-                return View(null);
+                var comparisonDTO = await _comparisonService.GetComparisonDtoAsync(userName);
+                var comparisonVM = GetComparisonViewModel(comparisonDTO);
+
+                return View(comparisonVM);
             }
 
-            var productsCompareVM = productsCompare.ToCompareViewModel();
-
-            return View(productsCompareVM);
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message);
+            }
         }
 
-        public IActionResult Add(Guid id, string userName)
+        public async Task<IActionResult> Add(Guid productId, string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
+            try
+            {
+                var comparisonDTO = await _comparisonService.AddProductAsync(productId, userName);
+                var comparisonVM = GetComparisonViewModel(comparisonDTO);
 
-            _productsCompareRepository.Add(id, user.Id);
+                return View(nameof(Index), comparisonVM);
+            }
 
-            return RedirectToAction(nameof(Index), user);
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message);
+            }
         }
 
-        public IActionResult Remove(Guid id, string userName)
+        public async Task<IActionResult> Remove(Guid productId, string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
-            _productsCompareRepository.Remove(id, user.Id);
+            try
+            {
+                var comparisonDTO = await _comparisonService.RemoveProductAsync(productId, userName);
+                var comparisonVM = GetComparisonViewModel(comparisonDTO);
 
-            return RedirectToAction(nameof(Index), user);
+                return View(nameof(Index), comparisonVM);
+            }
+
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message);
+            }
+        }
+
+        public ComparisonViewModel GetComparisonViewModel(ComparisonDTO comparisonDTO)
+        {
+            var comparisonVM = _mapper.Map<ComparisonViewModel>(comparisonDTO);
+
+            return comparisonVM;
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Entities;
-using OnlineShop.Infrastructure.Repositories;
+using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Persistence;
 
 namespace OnlineShop.Infrastructure.Repositories
@@ -21,65 +20,23 @@ namespace OnlineShop.Infrastructure.Repositories
 
         public async Task<Comparison?> GetByIdAsync(string userId)
         {
-            return await _appDbContext.Compares
+            return await _appDbContext.Comparisons
                 .Include(compare => compare.Products)
                 .FirstOrDefaultAsync(productsCompare => productsCompare.UserId == userId);
         }
-
-        public async Task<Product?> GetProductByIdAsync(Guid Id)
+        public async Task<Comparison> CreateComparisonAsync(string userId)
         {
-            return await _appDbContext.Products
-                .FirstOrDefaultAsync(product => product.Id == Id);
+            var comparison = new Comparison { UserId = userId };
+            await _appDbContext.Comparisons.AddAsync(comparison);
+
+            await _appDbContext.SaveChangesAsync();
+
+            return comparison;
         }
 
-        public async Task AddAsync(Guid id, string userId)
+        public async Task UpdateAsync(Comparison comparison)
         {
-            var compare = await GetByIdAsync(userId);
-            if (compare != null)
-            {
-                var product = await GetProductByIdAsync(id);
-                if (product == null)
-                    return;
-
-                if (compare.Products.Contains(product))
-                    return;
-
-                if (compare.Products.Count > 1)
-                {
-                    var lastProduct = compare.Products.Last();
-                    compare.Products.Remove(lastProduct);
-                    compare.Products.Add(product);
-                    await _appDbContext.SaveChangesAsync();
-                    return;
-                }
-
-                compare.Products.Add(product);
-               await _appDbContext.SaveChangesAsync();
-            }
-
-            else
-            {
-                compare = new Comparison { UserId = userId };
-                await _appDbContext.Compares.AddAsync(compare);
-                var product = await GetProductByIdAsync(id);
-                if (product != null)
-                    compare.Products.Add(product);
-
-                await _appDbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task RemoveAsync(Guid id, string userId)
-        {
-            var productsCompare = await GetByIdAsync(userId);
-            if (productsCompare != null)
-            {
-                var product = await GetProductByIdAsync(id);
-                if (product != null)
-                    productsCompare.Products.Remove(product);
-            }
-
-           await _appDbContext.SaveChangesAsync();
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

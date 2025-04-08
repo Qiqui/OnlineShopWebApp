@@ -4,11 +4,11 @@ using OnlineShop.Domain.Entities;
 
 namespace OnlineShop.Application.Profiles
 {
-    public class ComparisonProfile : Profile
+    public class FavouritesProfile : Profile
     {
-        public ComparisonProfile()
+        public FavouritesProfile()
         {
-            CreateMap<Comparison, ComparisonDTO>().ReverseMap();
+            CreateMap<Favourites, FavouritesDTO>().ReverseMap();
         }
     }
 }

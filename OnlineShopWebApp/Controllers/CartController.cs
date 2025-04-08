@@ -22,11 +22,19 @@ namespace OnlineShopWebApp.Controllers
 
         public async Task<IActionResult> Index(string userName)
         {
-            var cartDTO = await _cartsService.GetCartDtoAsync(userName);
+            try
+            {
+                var cartDTO = await _cartsService.GetCartDtoAsync(userName);
 
-            var cartVM = GetCartViewModel(cartDTO);
+                var cartVM = GetCartViewModel(cartDTO);
 
-            return View(cartVM);
+                return View(cartVM);
+            }
+
+            catch (NotFoundException ex)
+            {
+                return RedirectToAction("Inxex"); //TODO: Сделать View для ошибки NotFound
+            }
         }
 
         public async Task<IActionResult> AddPosition(Guid productId, string userName)
