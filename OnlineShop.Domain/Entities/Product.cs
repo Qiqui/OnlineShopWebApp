@@ -16,13 +16,13 @@ namespace OnlineShop.Domain.Entities
         public CategoryEnum Category { get; set; }
         public List<string> ImagePaths { get; set; } = new List<string>();
         public List<CartPosition> CartPositions { get; set; }
-        public List<Compare> Compares{ get; set; }
+        public List<Comparison> Compares{ get; set; }
         public List<Favourites> Favourites { get; set; }
 
         public Product()
         {
             CartPositions = new List<CartPosition>();
-            Compares = new List<Compare>();
+            Compares = new List<Comparison>();
             Favourites = new List<Favourites>();
         }
     }

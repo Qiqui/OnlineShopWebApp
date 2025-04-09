@@ -11,7 +11,7 @@ namespace OnlineShop.Infrastructure.Persistence
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Favourites> Favourites { get; set; }
-        public DbSet<Compare> Compares { get; set; }
+        public DbSet<Comparison> Comparisons { get; set; }
         public DbSet<Order> Orders { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
