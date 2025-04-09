@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Enum;
-using OnlineShop.Db.Interfaces;
-using OnlineShopWebApp.Helpers;
-using OnlineShop.Db.Helpers;
 
 namespace OnlineShopWebApp.Areas.Administration.Controllers
 {

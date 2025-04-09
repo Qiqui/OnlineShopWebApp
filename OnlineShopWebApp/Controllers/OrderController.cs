@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShopWebApp.Helpers;
+using OnlineShop.Application.DTOs;
+using OnlineShop.Application.Interfaces;
+using OnlineShop.Domain.Exceptions;
+using OnlineShop.Domain.Interfaces;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -9,26 +12,35 @@ namespace OnlineShopWebApp.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        private readonly ICartsRepository _cartsRepository;
-        private readonly IOrdersRepository _orderRepository;
-        private readonly UserManager<User> _userManager;
+        private readonly IOrderService _ordersService;
+        private readonly IUsersService _usersService;
+        private readonly IMapper _mapper;
 
-        public OrderController(ICartsRepository cartRepository, IOrdersRepository orderRepository, UserManager<User> userManager)
+        public OrderController(IOrderService ordersService, IUsersService usersService, IMapper mapper)
         {
-            _cartsRepository = cartRepository;
-            _orderRepository = orderRepository;
-            _userManager = userManager;
+            _ordersService = ordersService;
+            _usersService = usersService;
+            _mapper = mapper;
         }
 
-        public IActionResult Create(string userName)
+        public async Task<IActionResult> Create(string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
-            var order = new OrderViewModel(user.Id);
-            return View(order);
+            try
+            {
+                var userId = await _usersService.GetCurrentUserIdAsync(userName);
+                var orderVM = new OrderViewModel(userId);
+                return View(orderVM);
+            }
+
+            catch(NotFoundException ex)
+            {
+                return View(); // TODO: добавить вью ошибки
+            }
+            
         }
 
         [HttpPost]
-        public IActionResult Buy(OrderViewModel orderVM)
+        public async Task<IActionResult> Buy(OrderViewModel orderVM)
         {
             if (!orderVM.ContactInfo.IsAgreeWithDataProcessing)
                 ModelState.AddModelError("", "Необходимо дать согласие на обработку персональных данных");
@@ -36,19 +48,33 @@ namespace OnlineShopWebApp.Controllers
             if (!ModelState.IsValid)
                 return View("Create", orderVM);
 
-            var cart = _cartsRepository.TryGetById(orderVM.UserId);
-            if (cart != null)
+            try
             {
-                var contactInfo = orderVM.ContactInfo.ToContactInfo();
-                _orderRepository.Add(cart.Id, orderVM.UserId, contactInfo);
-                orderVM.Positions = cart.Positions.ToCartPositionsViewModel();
+                var orderDTO = GetOrderDTO(orderVM);
+                orderDTO = await _ordersService.CreateAsync(orderDTO);
+                orderVM = GetOrderViewModel(orderDTO);
+
+                return View(orderVM);
             }
 
-            _cartsRepository.Clear(orderVM.UserId);
-            var order = _orderRepository.TryGetLastByUserId(orderVM.UserId);
-            orderVM.Number = order.Number;
+            catch(NotFoundException ex)
+            {
+                return View(); //TODO: добавить вью ошибки
+            }
+        }
 
-            return View(orderVM);
+        public OrderDTO GetOrderDTO(OrderViewModel orderVM)
+        {
+            var orderDTO = _mapper.Map<OrderDTO>(orderVM);
+
+            return orderDTO;
+        }
+
+        public OrderViewModel GetOrderViewModel(OrderDTO orderDTO)
+        {
+            var orderVM = _mapper.Map<OrderViewModel>(orderDTO);
+
+            return orderVM;
         }
     }
 }

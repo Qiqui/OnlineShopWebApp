@@ -115,12 +115,30 @@ namespace OnlineShop.Application.Services
             }
         }
 
+        public async Task<List<CartPosition>> GetCartPositionsAndClearAsync(string userId)
+        {
+            try
+            {
+                var cart = await _cartsRepository.GetByIdAsync(userId);
+                var cartPositions = new List<CartPosition>(cart.Positions);
+                cart.Positions.Clear();
+
+                await _cartsRepository.UpdateAsync(cart);
+
+                return cartPositions;
+            }
+
+            catch (NotFoundException ex)
+            {
+                throw new NotFoundException(ex.Message);
+            }
+        }
+
         public async Task ClearAsync(string userName)
         {
             try
             {
-                var userId = await _usersService.GetCurrentUserIdAsync(userName);
-                var cart = await GetByNameAsync(userId);
+                var cart = await GetByNameAsync(userName);
 
                 if (cart != null)
                 {

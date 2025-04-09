@@ -9,6 +9,7 @@ namespace OnlineShop.Application.Profiles
         public CartPositionsProfile()
         {
             CreateMap<CartPosition, CartPositionDTO>().ReverseMap();
+            CreateMap<List<CartPosition>, List<OrderPosition>>().ReverseMap();
         }
     }
 }

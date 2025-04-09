@@ -11,11 +11,11 @@ namespace OnlineShopWebApp.Models
         public ContactInfoViewModel ContactInfo { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public OrderStatusEnum Status { get; set; }
-        public List<CartPositionViewModel> Positions { get; set; } = new List<CartPositionViewModel>();
+        public List<OrderPositionViewModel> Positions { get; set; } = new List<OrderPositionViewModel>();
 
         public decimal? TotalPrice
         {
-            get => Positions?.Sum(position => position.Quantity * position.Product.Cost);
+            get => Positions?.Sum(position => position.GetTotalPrice());
         }
 
         public OrderViewModel(string userId)
