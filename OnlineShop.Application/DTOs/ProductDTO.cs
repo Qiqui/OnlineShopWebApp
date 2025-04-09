@@ -1,5 +1,4 @@
 ﻿using OnlineShop.Application.Enums;
-using OnlineShop.Application.DTOs;
 
 namespace OnlineShop.Application.DTOs
 {

@@ -1,4 +1,4 @@
-﻿using OnlineShop.Application.Interfaces;
+﻿/*using OnlineShop.Application.Interfaces;
 
 namespace OnlineShop.Application.Services
 {
@@ -7,3 +7,4 @@ namespace OnlineShop.Application.Services
 
     }
 }
+*/

@@ -5,7 +5,7 @@
         public Guid Id { get; set; }
         public int Quantity { get; set; }
         public ProductViewModel Product { get; set; }
-        public OrderViewModel Cart { get; set; }
+        public OrderViewModel Order { get; set; }
 
         public decimal GetTotalPrice()
         {

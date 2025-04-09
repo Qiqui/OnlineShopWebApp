@@ -1,14 +1,11 @@
 ﻿using OnlineShop.Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OnlineShop.Domain.Entities;
 
 namespace OnlineShop.Application.Interfaces
 {
-    public interface IOrderService
+    public interface IOrdersService
     {
         Task<OrderDTO> CreateAsync(OrderDTO orderDTO);
+        Task<List<OrderDTO>> GetAllOrdersDTO();
     }
 }

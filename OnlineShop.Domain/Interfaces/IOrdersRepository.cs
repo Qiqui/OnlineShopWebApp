@@ -7,10 +7,9 @@ namespace OnlineShop.Domain.Interfaces
     {
         Task<Order?> GetByIdAsync(Guid id);
         Task<Order?> GetLastByUserIdAsync(string userId);
-        Task<List<CartPosition>> GetCartPositionsAsync(Guid id);
         Task<List<Order>> GetByUserIdAsync(string id);
         Task<List<Order>> GetAllAsync();
-        Task<int> GetCountAsync()
+        Task<int> GetCountAsync();
         Task AddAsync(Order order);
         Task<bool> UpdateStatusAsync(Guid id, OrderStatusEnum status);
     }

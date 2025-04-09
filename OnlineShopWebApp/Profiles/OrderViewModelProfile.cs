@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OnlineShop.Application.DTOs;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Profiles
 {
@@ -7,7 +8,9 @@ namespace OnlineShopWebApp.Profiles
     {
         public OrderViewModelProfile()
         {
-            CreateMap<OrderDTO, OrderViewModelProfile>().ReverseMap();
+            CreateMap<OrderDTO, OrderViewModel>()
+            .ForMember(orderVM => orderVM.Positions, opt => opt.MapFrom(orderDTO => orderDTO.Positions))
+            .ReverseMap();
         }
     }
 }

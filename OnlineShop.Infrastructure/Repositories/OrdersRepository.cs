@@ -11,12 +11,10 @@ namespace OnlineShop.Infrastructure.Repositories
     public class OrdersRepository : IOrdersRepository
     {
         private readonly AppDbContext _databaseContext;
-        private readonly UserManager<User> _userManager; // TODO: Убрать, возможно, не понадобится
 
-        public OrdersRepository(AppDbContext appDbContext, UserManager<User> userManager)
+        public OrdersRepository(AppDbContext appDbContext)
         {
             _databaseContext = appDbContext;
-            _userManager = userManager; // TODO: Убрать, возможно не понадобится
         }
 
         public async Task<Order?> GetByIdAsync(Guid id)
@@ -46,15 +44,6 @@ namespace OnlineShop.Infrastructure.Repositories
                 .Where(order => order.UserId == userId)
                 .OrderByDescending(order => order.CreateDate)
                 .FirstOrDefault();
-        }
-
-        public async Task<List<CartPosition>> GetCartPositionsAsync(Guid id)
-        {
-            var cart = await _databaseContext.Carts
-                .Include(cart => cart.Positions)
-                .FirstOrDefaultAsync(cart => cart.Id == id);
-
-            return cart?.Positions ?? new List<CartPosition>();
         }
 
         public async Task<int> GetCountAsync()

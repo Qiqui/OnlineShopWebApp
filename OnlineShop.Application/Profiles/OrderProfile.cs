@@ -8,7 +8,10 @@ namespace OnlineShop.Application.Profiles
     {
         public OrderProfile()
         {
-            CreateMap<Order, OrderDTO>().ReverseMap();
+            CreateMap<Order, OrderDTO>()
+            .ForMember(orderDTO => orderDTO.Positions, opt => opt.MapFrom(order => order.Positions))
+            .ReverseMap()
+            .ForMember(order => order.Positions, opt => opt.Ignore());
         }
     }
 }

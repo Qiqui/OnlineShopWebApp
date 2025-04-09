@@ -7,7 +7,7 @@ using OnlineShop.Domain.Interfaces;
 
 namespace OnlineShop.Application.Services
 {
-    public class OrderService : IOrderService
+    public class OrderService : IOrdersService
     {
         private readonly IOrdersRepository _orderRepository;
         private readonly ICartsService _cartService;
@@ -48,6 +48,14 @@ namespace OnlineShop.Application.Services
             return await _orderRepository.GetCountAsync() + 1;
         }
 
+        public async Task<List<OrderDTO>> GetAllOrdersDTO()
+        {
+            var orders = await _orderRepository.GetAllAsync();
+            var ordersDTO = GetOrdersDTO(orders);
+
+            return ordersDTO;
+        }
+
         private Order GetOrderFromOrderDTO(OrderDTO orderDTO)
         {
             var order = _mapper.Map<Order>(orderDTO);
@@ -60,6 +68,13 @@ namespace OnlineShop.Application.Services
             var orderDTO = _mapper.Map<OrderDTO>(order);
 
             return orderDTO;
+        }
+
+        private List<OrderDTO> GetOrdersDTO(List<Order> orders)
+        {
+            var ordersDTO = _mapper.Map<List<OrderDTO>>(orders);
+
+            return ordersDTO;
         }
 
         private List<OrderPosition> GetOrderPositions(List<CartPosition> cartPositions)

@@ -8,7 +8,10 @@ namespace OnlineShop.Application.Profiles
     {
         public CartProfile()
         {
-            CreateMap<Cart, CartDTO>().ReverseMap();
+            CreateMap<Cart, CartDTO>()
+            .ForMember(cartDTO => cartDTO.Positions, opt => opt.MapFrom(cart => cart.Positions))
+            .ReverseMap()
+            .ForMember(cart => cart.Positions, opt => opt.Ignore());
         }
     }
 }

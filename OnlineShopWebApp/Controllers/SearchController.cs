@@ -1,26 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShopWebApp.Helpers;
-using System.Linq;
+using OnlineShop.Application.Interfaces;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly IProductsRepository _productsRepository;
+        private readonly IProductsService _productsService;
 
-        public SearchController(IProductsRepository productsRepository)
+        public SearchController(IProductsService productsService)
         {
-            _productsRepository = productsRepository;
+            _productsService = productsService;
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult Searching(string keyWords)
         {
-            var products = _productsRepository.Search(keyWords);
+            var products = _productsService.Search(keyWords);
             var productsVM = products.ToProductsViewModel();
-            
+
             return View("Index", productsVM);
-        }
+        }*/
     }
 }

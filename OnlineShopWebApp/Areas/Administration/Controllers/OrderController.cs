@@ -1,24 +1,28 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Application.Interfaces;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Areas.Administration.Controllers
 {
 
     [Area("Administration")]
-    [Authorize(Roles = Constants.AdminRoleName)]
+    [Authorize(Roles = "Admin" /*Constants.AdminRoleName*/)]
     public class OrderController : Controller
     {
-        private readonly IOrdersRepository _orderRepository;
+        private readonly IOrdersService _ordersService;
+        private readonly IMapper _mapper;
 
-        public OrderController(IOrdersRepository orderRepository)
+        public OrderController(IOrdersService ordersService)
         {
-            _orderRepository = orderRepository;
+            _ordersService = ordersService;
         }
 
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var orders = _orderRepository.GetAll();
-            var ordersVM = orders.ToOrdersViewModel();
+            var orders = await _ordersService.GetAllOrdersDTO();
+            var ordersVM = _mapper.Map<List<OrderViewModel>>(orders);
 
             return View("Orders", ordersVM);
         }

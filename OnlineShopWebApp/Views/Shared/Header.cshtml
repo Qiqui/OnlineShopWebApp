@@ -1,4 +1,4 @@
-﻿@using OnlineShop.Db.Models
+﻿@using OnlineShop.
 
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light background-navbar-main border-bottom box-shadow mb-3">
@@ -43,7 +43,7 @@
                         </li>
                     }
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index" asp-route-userName="@User.Identity.Name">Корзина @await Component.InvokeAsync("Cart")</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index" asp-route-userName="@User.Identity.Name">Корзина @await Component.InvokeAsync("Cart") </a>
                     </li>
                     <li>
                         <form method="post" class="mb-3">

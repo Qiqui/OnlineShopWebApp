@@ -9,12 +9,10 @@ namespace OnlineShop.Infrastructure.Repositories
     public class ComparisonRepository : IComparisonRepository
     {
         private readonly AppDbContext _appDbContext;
-        private readonly UserManager<User> _userManager; //TODO: Убрать, возможно, не понадобится
 
-        public ComparisonRepository(AppDbContext appDbContext, UserManager<User> userManager)
+        public ComparisonRepository(AppDbContext appDbContext)
         {
             this._appDbContext = appDbContext;
-            _userManager = userManager;
         }
 
 

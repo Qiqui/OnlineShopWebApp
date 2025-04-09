@@ -8,7 +8,15 @@ namespace OnlineShopWebApp.Profiles
     {
         public ProductViewModelProfile()
         {
-            CreateMap<ProductDTO, ProductViewModel>().ReverseMap();
+            CreateMap<ProductDTO, ProductViewModel>()
+            .ForMember(productVM => productVM.ImagePaths, opt => opt.MapFrom(productDTO => productDTO.ImagePaths))
+            .ForMember(productVM => productVM.Gender, opt => opt.MapFrom(productDTO => productDTO.Gender))
+            .ForMember(productVM => productVM.Color, opt => opt.MapFrom(productDTO => productDTO.Color))
+            .ForMember(productVM => productVM.Collection, opt => opt.MapFrom(productDTO => productDTO.Collection))
+            .ForMember(productVM => productVM.Material, opt => opt.MapFrom(productDTO => productDTO.Material))
+            .ForMember(productVM => productVM.Brand, opt => opt.MapFrom(productDTO => productDTO.Brand))
+            .ForMember(productVM => productVM.Category, opt => opt.MapFrom(productDTO => productDTO.Category))
+            .ReverseMap();
         }
     }
 }

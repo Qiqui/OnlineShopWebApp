@@ -9,12 +9,10 @@ namespace OnlineShop.Infrastructure.Repositories
     public class FavouritesRepository : IFavouritesRepository
     {
         private readonly AppDbContext _appDbContext;
-        private readonly UserManager<User> _userManager; //TODO: Убрать, возможно, не понадобится
 
-        public FavouritesRepository(AppDbContext appDbContext, UserManager<User> userManager)
+        public FavouritesRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-            _userManager = userManager;
         }
 
         public async Task<Favourites> CreateFavouritesAsync(string userId)

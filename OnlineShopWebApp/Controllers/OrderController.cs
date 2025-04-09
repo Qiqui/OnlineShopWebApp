@@ -12,11 +12,11 @@ namespace OnlineShopWebApp.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        private readonly IOrderService _ordersService;
+        private readonly IOrdersService _ordersService;
         private readonly IUsersService _usersService;
         private readonly IMapper _mapper;
 
-        public OrderController(IOrderService ordersService, IUsersService usersService, IMapper mapper)
+        public OrderController(IOrdersService ordersService, IUsersService usersService, IMapper mapper)
         {
             _ordersService = ordersService;
             _usersService = usersService;
