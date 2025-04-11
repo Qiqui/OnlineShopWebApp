@@ -13,6 +13,7 @@ namespace OnlineShop.Infrastructure.Persistence
         public DbSet<Favourites> Favourites { get; set; }
         public DbSet<Comparison> Comparisons { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
