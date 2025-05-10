@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.Models;
-using OnlineShop.Db.Models;
-using OnlineShop.Db.Helpers;
-using System.Net;
-using OnlineShopWebApp.Helpers;
-using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -22,7 +17,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index(string returnUrl)
         {
-            var authyotization = new AuthorizationViewModel { ReturnUrl = returnUrl ?? "/Home"};
+            var authyotization = new AuthorizationViewModel { ReturnUrl = returnUrl ?? "/Home" };
             return View(authyotization);
         }
 
@@ -35,8 +30,8 @@ namespace OnlineShopWebApp.Controllers
                 ModelState.AddModelError("", "Неверно указана почта или пароль");
                 return View(nameof(Index), authorization);
             }
-            
-            if(!string.IsNullOrEmpty(authorization.ReturnUrl))
+
+            if (!string.IsNullOrEmpty(authorization.ReturnUrl))
                 return Redirect(authorization.ReturnUrl);
 
             return RedirectToAction(nameof(HomeController.Index), "Home");

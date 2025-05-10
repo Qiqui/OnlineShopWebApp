@@ -1,6 +1,6 @@
 ﻿namespace OnlineShopWebApp.Models
 {
-    public class CompareViewModel
+    public class ComparisonViewModel
     {
         public Guid Id { get; set; }
 

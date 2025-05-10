@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Helpers;
 
 namespace OnlineShopWebApp.Views.Shared.Components.Cart
 {
@@ -10,7 +7,7 @@ namespace OnlineShopWebApp.Views.Shared.Components.Cart
     {
         private readonly UserManager<User> _userManager;
 
-        public UserImage( UserManager<User> userManager)
+        public UserImage(UserManager<User> userManager)
         {
             _userManager = userManager;
         }

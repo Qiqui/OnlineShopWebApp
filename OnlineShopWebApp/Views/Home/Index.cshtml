@@ -52,14 +52,14 @@
                 }
             }
             <div class="card-body">
-                <a asp-controller="Product" asp-action="Index" asp-route-id="@product.Id" style="color: black">
+                <a asp-controller="Product" asp-action="Index" asp-route-productId="@product.Id" style="color: black">
                     <h4>@product.Name</h4>
                 </a>
                 <h5>@product.Cost руб.</h5>
                 @if (User.Identity.IsAuthenticated)
                 {
                     <a asp-controller="Cart" asp-action="Add" asp-route-Id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark"> Добавить в корзину </a>
-                    <a asp-controller="Compare" asp-action="Add" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark">Сравнить</a>
+                    <a asp-controller="Compare" asp-action="Add" asp-route-productId="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-outline-dark">Сравнить</a>
                     <a asp-controller="Favorites" asp-action="Add" asp-route-id="@product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-danger">Добавить в избранное</a>
                 }
             </div>

@@ -1,23 +1,27 @@
-using System.Diagnostics;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
+using OnlineShop.Application.Interfaces;
 using OnlineShopWebApp.Models;
-using OnlineShopWebApp.Helpers;
+using System.Diagnostics;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IProductsRepository _productsRepository;
+        private readonly IProductsService _productsService;
+        private readonly IMapper _mapper;
 
-        public HomeController(IProductsRepository productsRepository)
+        public HomeController(IProductsService productsService, IMapper mapper)
         {
-            _productsRepository = productsRepository;
+            _productsService = productsService;
+            _mapper = mapper;
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            var products = _productsRepository.GetAll();
-            var productsVM = products.ToProductsViewModel();
+            var productsDTO = await _productsService.GetAllAsync();
+            var productsVM = _mapper.Map<List<ProductViewModel>>(productsDTO);
+
             return View(productsVM);
         }
 

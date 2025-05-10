@@ -9,58 +9,36 @@ namespace OnlineShop.Infrastructure.Repositories
     public class FavouritesRepository : IFavouritesRepository
     {
         private readonly AppDbContext _appDbContext;
-        private readonly UserManager<User> _userManager; //TODO: Убрать, возможно, не понадобится
 
-        public FavouritesRepository(AppDbContext appDbContext, UserManager<User> userManager)
+        public FavouritesRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-            _userManager = userManager;
         }
 
+        public async Task<Favourites> CreateFavouritesAsync(string userId)
+        {
+            var favourites = new Favourites { UserId = userId };
+            await _appDbContext.Favourites.AddAsync(favourites);
 
-        public async Task<Favourites?> GetById(string userId)
+            await _appDbContext.SaveChangesAsync();
+
+            return favourites;
+        }
+
+        public async Task<Favourites?> GetByIdAsync(string userId)
         {
             return  await _appDbContext.Favourites
                 .Include(favourite => favourite.Products)
                 .FirstOrDefaultAsync(favorites => favorites.UserId == userId);
         }
-        public async Task<Product?> GetProductById(Guid Id)
+        public async Task<Product?> GetProductByIdAsync(Guid Id)
         {
             return await _appDbContext.Products
                 .FirstOrDefaultAsync(product => product.Id == Id);
         }
 
-        public async Task Add(Guid id, string userId)
+        public async Task Update(Favourites favourites)
         {
-            var favorites = await GetById(userId);
-            if (favorites != null)
-            {
-                var product = await GetProductById(id);
-                if (product != null && !favorites.Products.Contains(product))
-                    favorites.Products.Add(product);
-            }
-            else
-            {
-                var newFavorites = new Favourites { UserId = userId };
-                await _appDbContext.Favourites.AddAsync(newFavorites);
-                var product = await GetProductById(id);
-                if (product != null)
-                    newFavorites.Products.Add(product);
-            }
-
-            await _appDbContext.SaveChangesAsync();
-        }
-
-        public async Task Remove(Guid id, string userId)
-        {
-            var favorites = await GetById(userId);
-            if (favorites != null)
-            {
-                var product = await GetProductById(id);
-                if (product != null)
-                    favorites.Products.Remove(product);
-            }
-
             await _appDbContext.SaveChangesAsync();
         }
     }

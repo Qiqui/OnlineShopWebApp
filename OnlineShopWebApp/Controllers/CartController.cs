@@ -1,83 +1,95 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Helpers;
+using OnlineShop.Application.DTOs;
+using OnlineShop.Application.Interfaces;
+using OnlineShop.Domain.Exceptions;
+using OnlineShopWebApp.Models;
+
 
 namespace OnlineShopWebApp.Controllers
 {
-    [Authorize]
+    //[Authorize] TODO: Раскомитить попозже
     public class CartController : Controller
     {
-        private readonly IProductsRepository _productsRepository;
-        private readonly ICartsRepository _cartsRepository;
-        private readonly UserManager<User> _userManager;
+        private readonly ICartsService _cartsService;
+        private readonly IMapper _mapper;
 
-        public CartController(IProductsRepository productsRepository, ICartsRepository cartRepository, UserManager<User> userManager)
+        public CartController(ICartsService cartsService, IMapper mapper)
         {
-            _productsRepository = productsRepository;
-            _cartsRepository = cartRepository;
-            _userManager = userManager;
+            _cartsService = cartsService;
+            _mapper = mapper;
         }
 
-        public IActionResult Index(string userName)
+        public async Task<IActionResult> Index(string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
-            var cart = _cartsRepository.TryGetById(user.Id);
-            if (cart == null)
+            try
             {
-                _cartsRepository.Add(user);
-                cart = _cartsRepository.TryGetById(user.Id);
+                var cartDTO = await _cartsService.GetCartDtoAsync(userName);
+
+                var cartVM = GetCartViewModel(cartDTO);
+
+                return View(cartVM);
             }
 
-            var cartVM = cart.ToCartViewModel();
-
-            return View(cartVM);
+            catch (NotFoundException ex)
+            {
+                return RedirectToAction("Inxex"); //TODO: Сделать View для ошибки NotFound
+            }
         }
 
-        public IActionResult Add(Guid id, string userName)
+        public async Task<IActionResult> AddPosition(Guid productId, string userName)
         {
-            var product = _productsRepository.TryGetById(id);
+            try
+            {
+                var cartDTO = await _cartsService.AddPositionAsync(productId, userName);
+                var cartVM = GetCartViewModel(cartDTO);
 
-            if (product == null)
-                return View("Add", "Ошибка. Товар не был добавлен");
+                return View("index", cartVM);
+            }
 
-            var user = _userManager.FindByNameAsync(userName).Result;
-            _cartsRepository.Add(product, user);
-
-            var cart = _cartsRepository.TryGetById(user.Id);
-            var cartVM = cart.ToCartViewModel();
-
-            return View("index", cartVM);
+            catch (NotFoundException ex)
+            {
+                return RedirectToAction("Inxex"); //TODO: Сделать View для ошибки NotFound
+            }
         }
 
-        public IActionResult Remove(Guid id, string userName)
+        public async Task<IActionResult> RemovePosition(Guid productId, string userName)
         {
-            var product = _productsRepository.TryGetById(id);
+            try
+            {
+                var cartDTO = await _cartsService.RemovePositionAsync(productId, userName);
+                var cartVM = GetCartViewModel(cartDTO);
 
-            if (product == null)
-                return View("Ошибка. Товар не был удален");
+                return View("index", cartVM);
+            }
 
-            var user = _userManager.FindByNameAsync(userName).Result;
-            _cartsRepository.Remove(product, user);
-            var cart = _cartsRepository.TryGetById(user.Id);
-            var cartVM = cart.ToCartViewModel();
-
-            return View("index", cartVM);
+            catch (NotFoundException ex)
+            {
+                return RedirectToAction("Inxex"); //TODO: Сделать View для ошибки NotFound
+            }
         }
 
-        public IActionResult TryClear(string userName)
+        public async Task<IActionResult> ClearAsync(string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
-            var isCartCleared = _cartsRepository.Clear(user.Id);
+            try
+            {
+                await _cartsService.ClearAsync(userName);
 
-            if (!isCartCleared)
+                return View("index");
+            }
+
+            catch (NotFoundException ex)
             {
                 return View("CartClearError");
             }
 
-            return View("index");
+        }
+
+        public CartViewModel GetCartViewModel(CartDTO cartDTO)
+        {
+            var cartVM = _mapper.Map<CartViewModel>(cartDTO);
+
+            return cartVM;
         }
     }
 }

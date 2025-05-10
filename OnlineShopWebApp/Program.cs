@@ -1,10 +1,16 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Application.Interfaces;
+using OnlineShop.Application.Profiles;
+using OnlineShop.Application.Services;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Identity;
 using OnlineShop.Infrastructure.Persistence;
 using OnlineShop.Infrastructure.Repositories;
+using OnlineShop.Infrastructure.Services;
+using OnlineShopWebApp.Profiles;
 using Serilog;
 using System.Globalization;
 
@@ -35,12 +41,20 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(CartProfile).Assembly);
+
 // Add services to the container.
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<ICartsRepository, CartsRepository>();
-builder.Services.AddScoped<ICompareRepository, CompareRepository>();
+builder.Services.AddScoped<ICartsService, CartsService>();
+builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
+builder.Services.AddScoped<IComparisonService, ComparisonService>();
 builder.Services.AddScoped<IFavouritesRepository, FavouritesRepository>();
+builder.Services.AddScoped<IFavouritesService, FavouritesService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+builder.Services.AddScoped<IOrdersService, OrderService>();
+builder.Services.AddScoped<IUsersService, UserService>();
 
 builder.Services.AddControllersWithViews();
 

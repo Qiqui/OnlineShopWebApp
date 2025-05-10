@@ -25,9 +25,9 @@
                         @product.Product.Name
                     </td>
                     <td>
-                        <a asp-controller="Cart" asp-action="Remove" asp-route-Id="@product.Product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-danger">-</a>
+                        <a asp-controller="Cart" asp-action="RemovePositionAsync" asp-route-productId="@product.Product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-danger">-</a>
                         @product.Quantity
-                        <a asp-controller="Cart" asp-action="Add" asp-route-Id="@product.Product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-success">+</a>
+                        <a asp-controller="Cart" asp-action="AddPositionAsync" asp-route-productId="@product.Product.Id" asp-route-userName="@User.Identity.Name" class="btn btn-success">+</a>
                     </td>
                     <td>@product.GetTotalPrice() руб.</td>
                 </tr>
